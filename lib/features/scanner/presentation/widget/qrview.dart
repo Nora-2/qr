@@ -1,4 +1,3 @@
-// ignore_for_file: use_build_context_synchronously, unnecessary_brace_in_string_interps
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,12 +12,17 @@ class QRViewExample extends StatefulWidget {
 
 class _QRViewExampleState extends State<QRViewExample> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      ScannerCubit.get(context).controller!.pauseCamera();
+      ScannerCubit.get(context).controller?.pauseCamera();
     }
-    ScannerCubit.get(context).controller!.resumeCamera();
+    ScannerCubit.get(context).controller?.resumeCamera();
   }
 
   @override
@@ -26,7 +30,21 @@ class _QRViewExampleState extends State<QRViewExample> {
     return BlocProvider(
         create: (context) => ScannerCubit(),
         child: BlocConsumer<ScannerCubit, ScannerState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state is QRCodeStored) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('QR Code stored successfully!')),
+              );
+            } else if (state is QRCodeExists) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('QR Code already exists: ${state.qrCode}')),
+              );
+            } else if (state is QRCodeError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error storing QR Code: ${state.error}')),
+              );
+            }
+          },
           builder: (context, state) {
             return Scaffold(
               body: Column(
@@ -46,13 +64,16 @@ class _QRViewExampleState extends State<QRViewExample> {
                                 'Code: ${ScannerCubit.get(context).result!.code}')
                           else
                             SizedBox(
-                              height: 20,
-                              width: 50,
+                              height: 50,
+                              width: 200,
                               child: ElevatedButton(
                                 onPressed: () {
                                   ScannerCubit.get(context).startSingleScan();
                                 },
-                                child: const Text('Scan'),
+                                child: const Text(
+                                  'Scan',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                         ],
@@ -69,6 +90,7 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   void dispose() {
     ScannerCubit.get(context).controller?.dispose();
+    ScannerCubit.get(context).close(); // Ensure to close the cubit
     super.dispose();
   }
 }

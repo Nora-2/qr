@@ -6,7 +6,7 @@ import 'package:qr_code_app/features/scanner/presentation/widget/storecode.dart'
 
 DateTime now = DateTime.now();
 String formattedTime =
-    '${now.year}-${now.month}-${now.day}_${now.hour}-${now.minute}-${now.second}';
+    'Date-${now.year}/${now.month}/${now.day} Time-${now.hour}:${now.minute}:${now.second}';
 
 class MyHome extends StatelessWidget {
   MyHome({super.key});

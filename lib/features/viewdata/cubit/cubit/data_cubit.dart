@@ -1,27 +1,29 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// ignore: depend_on_referenced_packages
+import 'package:qr_code_app/features/scanner/cubit/cubit/scanner_cubit.dart';
 
 part 'data_state.dart';
 
 class DataCubit extends Cubit<DataState> {
   DataCubit() : super(DataInitial());
 
-    static DataCubit get(context) => BlocProvider.of(context);
-  Future<void> deleteData(String docId) async {
+  static DataCubit get(context) => BlocProvider.of(context);
+
+  Future<void> deleteData(String docId,BuildContext context) async {
     try {
       await FirebaseFirestore.instance
           .collection('qrcodes')
           .doc(docId)
           .delete();
-      // ignore: use_build_context_synchronously
+      await rearrangeAndSetCurrentId();
+      await ScannerCubit.get(context).rearrangeAndSetCurrentId();
+      emit(DataDeletedSuccessfully());
 
       const SnackBar(content: Text('QR Code deleted successfully!'));
     } catch (e) {
-      print("Error deleting QR code: $e");
-      
-      // ignore: use_build_context_synchronously
+      emit(DataDeletionError());
 
       SnackBar(content: Text('Error deleting QR Code: $e'));
     }
@@ -36,15 +38,46 @@ class DataCubit extends Cubit<DataState> {
         batch.delete(doc.reference);
       }
       await batch.commit();
-      // ignore: use_build_context_synchronously
+      await _resetCurrentId();
+      emit(AllDataDeletedSuccessfully());
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('All QR Codes deleted successfully!')),
       );
     } catch (e) {
-      // ignore: use_build_context_synchronously
+      emit(DataDeletionError());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error deleting all QR Codes: $e')),
       );
     }
+  }
+
+  Future<void> rearrangeAndSetCurrentId() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('qrcodes')
+          .orderBy('id')
+          .get();
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      int currentId = 1;
+
+      for (var doc in querySnapshot.docs) {
+        batch.update(doc.reference, {'id': currentId});
+        currentId++;
+      }
+
+      await batch.commit();
+
+      DocumentReference idRef =
+          FirebaseFirestore.instance.collection('metadata').doc('currentId');
+      await idRef.set({'id': currentId});
+    } catch (e) {
+      print("Error rearranging IDs and setting currentId: $e");
+    }
+  }
+
+  Future<void> _resetCurrentId() async {
+    DocumentReference idRef =
+        FirebaseFirestore.instance.collection('metadata').doc('currentId');
+    await idRef.set({'id': 1});
   }
 }

@@ -2,17 +2,18 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qr_code_app/features/scanner/presentation/view/scanner.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+
 part 'scanner_state.dart';
 
 class ScannerCubit extends Cubit<ScannerState> {
   ScannerCubit() : super(ScannerInitial());
   static ScannerCubit get(context) => BlocProvider.of(context);
-   Barcode? result;
+  Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   bool isScanning = false;
+  int currentId = 1; // Current ID variable
 
   Widget buildQrView(BuildContext context) {
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
@@ -32,29 +33,24 @@ class ScannerCubit extends Cubit<ScannerState> {
     );
   }
 
-
-
-  void _onQRViewCreated(QRViewController controller,) {
+  void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       if (!isScanning) {
         return;
       }
-   
-        result = scanData;
-        isScanning = false;
-        controller.pauseCamera();
-        checkAndStoreQRCode(scanData.code,);
-      
+
+      result = scanData;
+      isScanning = false;
+      controller.pauseCamera();
+      checkAndStoreQRCode(scanData.code);
     });
   }
 
   void startSingleScan() {
-   
-      result = null;
-      isScanning = true;
-      controller?.resumeCamera();
-    }
+    result = null;
+    isScanning = true;
+    controller?.resumeCamera();
   }
 
   Future<int> _getNextId() async {
@@ -64,22 +60,21 @@ class ScannerCubit extends Cubit<ScannerState> {
 
     if (idSnapshot.exists) {
       var data = idSnapshot.data() as Map<String, dynamic>;
-      int currentId = data['id'] ?? 0;
+      currentId = data['id'] ?? 1; // Initialize currentId to 1 if not found
       await idRef.update({'id': currentId + 1});
-      return currentId + 1;
+      return currentId;
     } else {
       await idRef.set({'id': 1});
       return 1;
     }
   }
 
-  Future<void> checkAndStoreQRCode(
-    String? qrCode,
-  
-  ) async {
+  Future<void> checkAndStoreQRCode(String? qrCode) async {
     if (qrCode == null) return;
 
     try {
+      int docId = await _getNextId(); // Get the current ID
+
       // Check if the QR code already exists in the collection
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('qrcodes')
@@ -87,17 +82,17 @@ class ScannerCubit extends Cubit<ScannerState> {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        
-            SnackBar(content: Text('QR Code already exists: $qrCode'));
+        emit(QRCodeExists(qrCode));
         return;
       }
 
       // If it doesn't exist, proceed to store it
-      int nextId = await _getNextId();
-      String docId = nextId.toString();
-
       DocumentReference docRef =
-          FirebaseFirestore.instance.collection('qrcodes').doc(docId);
+          FirebaseFirestore.instance.collection('qrcodes').doc(docId.toString());
+
+        DateTime now = DateTime.now();
+String formattedTime =
+    'Date-${now.year}/${now.month}/${now.day} Time-${now.hour}:${now.minute}:${now.second}';
 
       await docRef.set({
         'id': docId,
@@ -105,9 +100,9 @@ class ScannerCubit extends Cubit<ScannerState> {
         'datetime': formattedTime,
       });
 
-       const SnackBar(content: Text('QR Code stored successfully!'));
+      emit(QRCodeStored());
     } catch (e) {
-     SnackBar(content: Text('Error storing QR Code: $e'));
+      emit(QRCodeError(e.toString()));
     }
   }
 
@@ -120,3 +115,27 @@ class ScannerCubit extends Cubit<ScannerState> {
     }
   }
 
+  Future<void> rearrangeAndSetCurrentId() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('qrcodes')
+          .orderBy('id')
+          .get();
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      int currentId = 1;
+
+      for (var doc in querySnapshot.docs) {
+        batch.update(doc.reference, {'id': currentId});
+        currentId++;
+      }
+
+      await batch.commit();
+
+      DocumentReference idRef =
+          FirebaseFirestore.instance.collection('metadata').doc('currentId');
+      await idRef.set({'id': currentId});
+    } catch (e) {
+      print("Error rearranging IDs and setting currentId: $e");
+    }
+  }
+}

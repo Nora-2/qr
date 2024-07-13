@@ -1,6 +1,14 @@
+
 part of 'data_cubit.dart';
 
-@immutable
-sealed class DataState {}
+abstract class DataState {}
 
-final class DataInitial extends DataState {}
+class DataInitial extends DataState {}
+
+class DataDeleted extends DataState {}
+
+class AllDataDeleted extends DataState {}
+class DataDeletionError
+ extends DataState {}
+class DataDeletedSuccessfully extends DataState {}
+class AllDataDeletedSuccessfully extends DataState {}

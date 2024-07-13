@@ -54,8 +54,8 @@ void storeCode(BuildContext context,TextEditingController code) async {
     if (idSnapshot.exists) {
       var data = idSnapshot.data() as Map<String, dynamic>;
       int currentId = data['id'] ?? 0;
-      await idRef.update({'id': currentId + 1});
-      return currentId + 1;
+      await idRef.update({'id': currentId+1 });
+      return currentId ;
     } else {
       await idRef.set({'id': 1});
       return 1;
