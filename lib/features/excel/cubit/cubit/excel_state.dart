@@ -6,5 +6,5 @@ part of 'excel_cubit.dart';
 sealed class ExcelState {}
 
 final class ExcelInitial extends ExcelState {}
-final class filedownloadsecss extends ExcelState {}
-final class filedownloadfailed extends ExcelState {}
+final class ExcelDownloadSuccess extends ExcelState {}
+final class ExcelDownloadFailed extends ExcelState {}

@@ -1,14 +1,18 @@
 import 'dart:developer';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_app/core/utilis/databasehelper.dart'; // Import your DatabaseHelper
 
 part 'scanner_state.dart';
+DateTime dateToday = DateTime.now();
+String date = dateToday.toString().substring(0, 10);
 
 class ScannerCubit extends Cubit<ScannerState> {
   ScannerCubit() : super(ScannerInitial());
+
   static ScannerCubit get(context) => BlocProvider.of(context);
+
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -54,19 +58,10 @@ class ScannerCubit extends Cubit<ScannerState> {
   }
 
   Future<int> _getNextId() async {
-    DocumentReference idRef =
-        FirebaseFirestore.instance.collection('metadata').doc('currentId');
-    DocumentSnapshot idSnapshot = await idRef.get();
-
-    if (idSnapshot.exists) {
-      var data = idSnapshot.data() as Map<String, dynamic>;
-      currentId = data['id'] ?? 1; // Initialize currentId to 1 if not found
-      await idRef.update({'id': currentId + 1});
-      return currentId;
-    } else {
-      await idRef.set({'id': 1});
-      return 1;
-    }
+    DatabaseHelper dbHelper = DatabaseHelper();
+    List<Map<String, dynamic>> codes = await dbHelper.queryAllQRCodes();
+    int nextId = codes.isNotEmpty ? codes.last['id'] + 1 : 1;
+    return nextId;
   }
 
   Future<void> checkAndStoreQRCode(String? qrCode) async {
@@ -75,30 +70,23 @@ class ScannerCubit extends Cubit<ScannerState> {
     try {
       int docId = await _getNextId(); // Get the current ID
 
-      // Check if the QR code already exists in the collection
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('qrcodes')
-          .where('qrCode', isEqualTo: qrCode)
-          .get();
+      // Initialize the DatabaseHelper instance
+      DatabaseHelper dbHelper = DatabaseHelper();
 
-      if (querySnapshot.docs.isNotEmpty) {
+      // Check if the QR code already exists in the local database
+      List<Map<String, dynamic>> existingCodes = await dbHelper.queryAllQRCodes();
+      if (existingCodes.any((element) => element['qrCode'] == qrCode)) {
         emit(QRCodeExists(qrCode));
         return;
       }
 
       // If it doesn't exist, proceed to store it
-      DocumentReference docRef =
-          FirebaseFirestore.instance.collection('qrcodes').doc(docId.toString());
-
-        DateTime now = DateTime.now();
-String formattedTime =
-    'Date-${now.year}/${now.month}/${now.day} Time-${now.hour}:${now.minute}:${now.second}';
-
-      await docRef.set({
+      Map<String, dynamic> newCode = {
         'id': docId,
         'qrCode': qrCode,
-        'datetime': formattedTime,
-      });
+        'datetime': date,
+      };
+      await dbHelper.insertQRCode(newCode);
 
       emit(QRCodeStored());
     } catch (e) {
@@ -112,30 +100,6 @@ String formattedTime =
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('No Permission')),
       );
-    }
-  }
-
-  Future<void> rearrangeAndSetCurrentId() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('qrcodes')
-          .orderBy('id')
-          .get();
-      WriteBatch batch = FirebaseFirestore.instance.batch();
-      int currentId = 1;
-
-      for (var doc in querySnapshot.docs) {
-        batch.update(doc.reference, {'id': currentId});
-        currentId++;
-      }
-
-      await batch.commit();
-
-      DocumentReference idRef =
-          FirebaseFirestore.instance.collection('metadata').doc('currentId');
-      await idRef.set({'id': currentId});
-    } catch (e) {
-      print("Error rearranging IDs and setting currentId: $e");
     }
   }
 }
