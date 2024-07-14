@@ -35,7 +35,7 @@ class customAwesomeDialog extends StatelessWidget {
       ),
       desc: description,
       descTextStyle: const TextStyle(
-        fontSize: 22,
+        fontSize: 20,
       ),
       btnOk: ElevatedButton(
         onPressed: () {

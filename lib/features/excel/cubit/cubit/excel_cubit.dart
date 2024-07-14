@@ -1,13 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_excel/excel.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart'; // Adjust import as per your project structure
-import 'package:qr_code_app/core/utilis/showdialog.dart'; // Adjust import as per your project structure
+import 'package:qr_code_app/core/utilis/showdialog.dart';
+import 'package:qr_code_app/widgets/AwesomeDiaglog.dart'; // Adjust import as per your project structure
 
 part 'excel_state.dart'; // Define your ExcelState
 
@@ -65,47 +66,30 @@ class ExcelCubit extends Cubit<ExcelState> {
       showdialogcustomconvert(context, filePath); // Implement this function as per your needs
 
 
-      // Show SnackBar using ScaffoldMessenger
-        ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor:  primarycolor,
-                  duration: const Duration(seconds: 3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Colors.white, width: 2),
-                  ),
-                  content: const Text(
-                    'Excel file downloaded successfully!',
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Color(0xFFF1F4FF),
-                    ),
-                  ),
-                ),
-              );
+      //Show AlertDialog
+  customAwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          title: 'Success',
+          description:
+              'Excel file downloaded successfully! \n تم تنزيل ملف اكسل بنجاح',
+          buttonColor: Color(0xff00CA71))
+      .show();
+
 
       // Emit success state
       emit(ExcelDownloadSuccess());
     } catch (e) {
        
-      // Show SnackBar using ScaffoldMessenger
-      ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor:  primarycolor,
-                  duration: const Duration(seconds: 3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Colors.white, width: 2),
-                  ),
-                  content: Text(
-                    'Failed to download data: $e',
-                    style:const TextStyle(
-                      fontSize: 17,
-                      color: Color(0xFFF1F4FF),
-                    ),
-                  ),
-                ),
-              );
+       //Show AlertDialog
+    customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            title: 'Error',
+            description:
+                'Failed to download Excel: $e \n فشل في تنزيل ملف اكسل',
+            buttonColor: Color(0xffD93E47))
+        .show();
       
 
       // Emit failure state

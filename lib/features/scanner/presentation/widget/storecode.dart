@@ -16,7 +16,7 @@ void storeCode(
             context: context,
             dialogType: DialogType.info,
             title: 'Info',
-            description: 'Please enter the barcode... \n ...من فضلك ادخل الباركود',
+            description: 'Please enter the barcode ... \n ... من فضلك ادخل الباركود',
             buttonColor: Color(0xff0098FF)
             )
         .show();
