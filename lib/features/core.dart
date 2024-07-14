@@ -1,19 +1,19 @@
+import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/features/excel/presentation/view/excel.dart';
 import 'package:qr_code_app/features/scanner/presentation/view/scanner.dart';
 import 'package:qr_code_app/features/viewdata/presentation/view/viewdata.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_app/features/welcome.dart';
 import 'package:qr_code_app/widgets/CustomButton.dart';
 
 class Core extends StatelessWidget {
   const Core({super.key});
-
+ static String id = 'homepage';
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: const Color(0xFF2452B1),
+      backgroundColor:  primarycolor,
       body: Column(
         children: [
           SizedBox(
@@ -21,25 +21,9 @@ class Core extends StatelessWidget {
             width: width,
             child: Column(
               children: [
+              
                 Container(
-                  padding: EdgeInsets.only(top: height * 0.05),
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const welcomePage()),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: height * 0.02),
+                  padding: EdgeInsets.only(top: height * 0.07),
                   child: const Center(
                     child: Text('Naham Inventory',
                         style: TextStyle(

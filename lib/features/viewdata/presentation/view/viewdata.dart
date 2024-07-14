@@ -5,7 +5,7 @@ import 'package:qr_code_app/core/utilis/databasehelper.dart';
 
 class ViewDataScreen extends StatefulWidget {
   const ViewDataScreen({Key? key}) : super(key: key);
-
+ static String id = 'viewdata';
   @override
   _ViewDataScreenState createState() => _ViewDataScreenState();
 }
@@ -43,12 +43,12 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_sweep),
-            onPressed: () {
+            onPressed: ()async {
               _deleteAllQRCodes(context);
-              // Navigator.pushReplacement(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const ViewDataScreen()),
-              // );
+             await Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ViewDataScreen()),
+              );
             },
           ),
         ],
@@ -63,16 +63,16 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
                     title: Text('QR Code: ${code['qrCode']}'),
-                    subtitle: Text('ID: ${code['id']}\n ${code['datetime']}'),
+                    subtitle: Text('ID: ${code['id']}\n datatime ${code['datetime']}'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
-                      onPressed: () {
+                      onPressed: ()async {
                         _deleteQRCode(context, code['id'], index);
-                        // Navigator.pushReplacement(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => const ViewDataScreen()),
-                        // );
+                      await  Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ViewDataScreen()),
+                        );
                       },
                     ),
                   ),

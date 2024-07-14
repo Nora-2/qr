@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
 
 DateTime dateToday = DateTime.now();
@@ -10,7 +11,7 @@ void storeCode(BuildContext context, TextEditingController codeController) async
   if (enteredCode.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: Color(0xFF2452B1),
+        backgroundColor: primarycolor,
         duration: const Duration(seconds: 3),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -38,7 +39,7 @@ void storeCode(BuildContext context, TextEditingController codeController) async
   if (existingCodes.any((element) => element['qrCode'] == enteredCode)) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: const Color(0xFF2452B1),
+        backgroundColor:  primarycolor,
         duration: const Duration(seconds: 3),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -68,7 +69,7 @@ void storeCode(BuildContext context, TextEditingController codeController) async
   // Show a success message using a SnackBar
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      backgroundColor: const Color(0xFF2452B1),
+      backgroundColor:  primarycolor,
       duration: const Duration(seconds: 3),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

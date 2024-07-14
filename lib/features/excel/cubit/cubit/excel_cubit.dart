@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_excel/excel.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart'; // Adjust import as per your project structure
 import 'package:qr_code_app/core/utilis/showdialog.dart'; // Adjust import as per your project structure
 
@@ -29,7 +32,7 @@ class ExcelCubit extends Cubit<ExcelState> {
       Sheet sheetObject = excel['QR Codes'];
 
       // Write headers to Excel sheet
-      List<String> headers = data.first.keys.toList();
+      List<String> headers = ['ID','QRCode','Date'];
       for (int i = 0; i < headers.length; i++) {
         var cell = sheetObject.cell(CellIndex.indexByString('${String.fromCharCode(65 + i)}1'));
         cell.value = headers[i];
@@ -65,13 +68,13 @@ class ExcelCubit extends Cubit<ExcelState> {
       // Show SnackBar using ScaffoldMessenger
         ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  backgroundColor: const Color(0xFF2452B1),
+                  backgroundColor:  primarycolor,
                   duration: const Duration(seconds: 3),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: const BorderSide(color: Colors.white, width: 2),
                   ),
-                  content: Text(
+                  content: const Text(
                     'Excel file downloaded successfully!',
                     style: TextStyle(
                       fontSize: 17,
@@ -88,7 +91,7 @@ class ExcelCubit extends Cubit<ExcelState> {
       // Show SnackBar using ScaffoldMessenger
       ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  backgroundColor: const Color(0xFF2452B1),
+                  backgroundColor:  primarycolor,
                   duration: const Duration(seconds: 3),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -96,7 +99,7 @@ class ExcelCubit extends Cubit<ExcelState> {
                   ),
                   content: Text(
                     'Failed to download data: $e',
-                    style: TextStyle(
+                    style:const TextStyle(
                       fontSize: 17,
                       color: Color(0xFFF1F4FF),
                     ),

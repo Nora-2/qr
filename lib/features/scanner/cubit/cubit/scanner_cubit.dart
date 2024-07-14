@@ -22,8 +22,8 @@ class ScannerCubit extends Cubit<ScannerState> {
   Widget buildQrView(BuildContext context) {
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
-        ? 150.0
-        : 300.0;
+        ? 180.0
+        : 350.0;
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,

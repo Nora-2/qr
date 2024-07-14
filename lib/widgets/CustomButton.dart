@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:qr_code_app/core/utilis/constant.dart';
 
 // ignore: camel_case_types
 class customButton extends StatelessWidget {
@@ -14,7 +15,7 @@ class customButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: const Color(0xFF2452B1),
+        color:  primarycolor,
       ),
       width: width * 0.84,
       height: height * 0.07,

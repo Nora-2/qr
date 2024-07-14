@@ -12,7 +12,7 @@ Future<dynamic> showdialogcustom(BuildContext context, String image) {
           fit: BoxFit.cover,
         ),
         title: const Text(
-          'Check your Gmail',
+          'Check your Files',
           textAlign: TextAlign.center,
         ),
         actions: [
