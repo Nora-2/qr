@@ -1,10 +1,13 @@
 import 'dart:developer';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart'; // Import your DatabaseHelper
 
 part 'scanner_state.dart';
+
 DateTime dateToday = DateTime.now();
 String date = dateToday.toString().substring(0, 10);
 
@@ -74,7 +77,8 @@ class ScannerCubit extends Cubit<ScannerState> {
       DatabaseHelper dbHelper = DatabaseHelper();
 
       // Check if the QR code already exists in the local database
-      List<Map<String, dynamic>> existingCodes = await dbHelper.queryAllQRCodes();
+      List<Map<String, dynamic>> existingCodes =
+          await dbHelper.queryAllQRCodes();
       if (existingCodes.any((element) => element['qrCode'] == qrCode)) {
         emit(QRCodeExists(qrCode));
         return;
@@ -97,9 +101,14 @@ class ScannerCubit extends Cubit<ScannerState> {
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No Permission')),
-      );
+      customAwesomeDialog(
+              context: context,
+              dialogType: DialogType.error,
+              title: 'Error',
+              description:
+                  'No permission to access the camera \n لا تصريح بالوصول إلى الكاميرا',
+              buttonColor: Color(0xffD93E47))
+          .show();
     }
   }
 }

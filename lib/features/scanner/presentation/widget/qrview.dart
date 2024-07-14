@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/features/scanner/cubit/cubit/scanner_cubit.dart';
+import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
 
 class QRViewExample extends StatefulWidget {
   const QRViewExample({super.key});
@@ -37,66 +39,46 @@ class _QRViewExampleState extends State<QRViewExample> {
           listener: (context, state) {
             if (state is QRCodeStored) {
               debugPrint('QRCodeStored State Triggered');// Debugging statement
-              // Show SnackBar using ScaffoldMessenger
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor:  primarycolor,
-                  duration: const Duration(seconds: 3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Colors.white, width: 2),
-                  ),
-                  content:const Text(
-                    'QR Code stored successfully!',
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Color(0xFFF1F4FF),
-                    ),
-                  ),
-                ),
-              );
+
+              // Show AlertDialog
+               customAwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          title: 'Success',
+          description:
+              'The barcode stored successfully! \n تم حفظ الباركود بنجاح',
+          buttonColor: Color(0xff00CA71))
+      .show();
+      
             } else if (state is QRCodeExists) {
               debugPrint(
                   'QRCodeExists State Triggered with: ${state.qrCode}'); // Debugging statement
-              // Show SnackBar using ScaffoldMessenger
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor:  primarycolor,
-                  duration: const Duration(seconds: 3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Colors.white, width: 2),
-                  ),
-                  content: Text(
-                    'QR Code already exists: ${ScannerCubit.get(context).result!.code}',
-                    style:const TextStyle(
-                      fontSize: 17,
-                      color: Color(0xFFF1F4FF),
-                    ),
-                  ),
-                ),
-              );
+
+              // Show AlertDialog
+               customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            title: 'Error',
+            description:
+                'The barcode already exists: ${ScannerCubit.get(context).result!.code} \n هذا الباركود موجود بالفعل',
+            buttonColor: Color(0xffD93E47))
+        .show();
+              
+
             } else if (state is QRCodeError) {
               debugPrint(
                   'QRCodeError State Triggered with: ${state.error}'); // Debugging statement
-              // Show SnackBar using ScaffoldMessenger
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor:  primarycolor,
-                  duration: const Duration(seconds: 2),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Colors.white, width: 2),
-                  ),
-                  content: Text(
-                    'Error storing QR Code: ${state.error}',
-                    style: const TextStyle(
-                      fontSize: 17,
-                      color: Color(0xFFF1F4FF),
-                    ),
-                  ),
-                ),
-              );
+
+                  // Show AlertDialog
+               customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            title: 'Error',
+            description:
+                'Error storing the barcode : ${state.error} \n حدث خطأأثناء تخزين الباركود',
+            buttonColor: Color(0xffD93E47))
+        .show();
+              
             }
           },
           builder: (context, state) {

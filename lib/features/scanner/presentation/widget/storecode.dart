@@ -1,31 +1,26 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
+import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
 
 DateTime dateToday = DateTime.now();
 String date = dateToday.toString().substring(0, 10);
 
-void storeCode(BuildContext context, TextEditingController codeController) async {
+void storeCode(
+    BuildContext context, TextEditingController codeController) async {
   String enteredCode = codeController.text.trim();
 
   if (enteredCode.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: primarycolor,
-        duration: const Duration(seconds: 3),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: Colors.white, width: 2),
-        ),
-        content: const Text(
-          'Please enter a code',
-          style: TextStyle(
-            fontSize: 17,
-            color: Color(0xFFF1F4FF),
-          ),
-        ),
-      ),
-    );
+    //Show AlertDialog
+    customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.info,
+            title: 'Info',
+            description: 'Please enter the barcode... \n ...من فضلك ادخل الباركود',
+            buttonColor: Color(0xff0098FF)
+            )
+        .show();
+
     return;
   }
 
@@ -37,23 +32,17 @@ void storeCode(BuildContext context, TextEditingController codeController) async
 
   // Check if the entered code already exists in the local database
   if (existingCodes.any((element) => element['qrCode'] == enteredCode)) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor:  primarycolor,
-        duration: const Duration(seconds: 3),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: Colors.white, width: 2),
-        ),
-        content: Text(
-          'Code already exists: $enteredCode',
-          style: TextStyle(
-            fontSize: 17,
-            color: Color(0xFFF1F4FF),
-          ),
-        ),
-      ),
-    );
+
+    //Show AlertDialog
+    customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            title: 'Error',
+            description:
+                'The barcode already exists: $enteredCode \n هذا الباركود موجود بالفعل',
+            buttonColor: Color(0xffD93E47))
+        .show();
+
     return;
   }
 
@@ -66,22 +55,14 @@ void storeCode(BuildContext context, TextEditingController codeController) async
   // Insert the new QR code into the local database
   await dbHelper.insertQRCode(newCode);
 
-  // Show a success message using a SnackBar
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor:  primarycolor,
-      duration: const Duration(seconds: 3),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(color: Colors.white, width: 2),
-      ),
-      content: const Text(
-        'Code stored successfully!',
-        style: TextStyle(
-          fontSize: 17,
-          color: Color(0xFFF1F4FF),
-        ),
-      ),
-    ),
-  );
+  //Show AlertDialog
+  customAwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          title: 'Success',
+          description:
+              'The barcode stored successfully! \n تم حفظ الباركود بنجاح',
+          buttonColor: Color(0xff00CA71))
+      .show();
+ 
 }
