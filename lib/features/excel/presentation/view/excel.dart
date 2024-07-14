@@ -30,7 +30,7 @@ class _DownloadDataScreenState extends State<DownloadDataScreen> {
                     child: Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(top: height * 0.01),
+                          padding: EdgeInsets.only(top: height * 0.05),
                           alignment: Alignment.topLeft,
                           child: IconButton(
                             onPressed: () {
@@ -112,7 +112,7 @@ class _DownloadDataScreenState extends State<DownloadDataScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                             onPressed: () => ExcelCubit.get(context).downloadData,
+                             onPressed: () => ExcelCubit.get(context).downloadData(context),
                               child: const Text(
                                 'Download Data as Excel',
                                 style: TextStyle(

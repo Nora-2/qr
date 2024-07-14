@@ -22,7 +22,7 @@ class Core extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: height * 0.01),
+                  padding: EdgeInsets.only(top: height * 0.05),
                   alignment: Alignment.topLeft,
                   child: IconButton(
                     onPressed: () {

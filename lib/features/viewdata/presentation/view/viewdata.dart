@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
 
@@ -41,7 +43,13 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_sweep),
-            onPressed: () => _deleteAllQRCodes(context),
+            onPressed: () {
+              _deleteAllQRCodes(context);
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const ViewDataScreen()),
+              // );
+            },
           ),
         ],
       ),
@@ -58,7 +66,14 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
                     subtitle: Text('ID: ${code['id']}\n ${code['datetime']}'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
-                      onPressed: () => _deleteQRCode(context, code['id'], index),
+                      onPressed: () {
+                        _deleteQRCode(context, code['id'], index);
+                        // Navigator.pushReplacement(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => const ViewDataScreen()),
+                        // );
+                      },
                     ),
                   ),
                 );
@@ -69,10 +84,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
 
   Future<void> _deleteAllQRCodes(BuildContext context) async {
     await _dbHelper.deleteAllQRCodes();
-    await _loadData(); // Wait for data to update
-    setState(() {
-      _qrcodes.clear(); // Clear UI after data is updated
-    });
+    _loadData(); // Wait for data to update
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('All QR Codes deleted successfully!'),
@@ -83,10 +95,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
 
   Future<void> _deleteQRCode(BuildContext context, int id, int index) async {
     await _dbHelper.deleteQRCode(id);
-    await _loadData(); // Wait for data to update
-    setState(() {
-      _qrcodes.removeAt(index); // Remove from UI after data is updated
-    });
+    _loadData(); // Wait for data to update
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('QR Code deleted successfully!'),
