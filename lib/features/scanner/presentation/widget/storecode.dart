@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
-
-DateTime dateToday = DateTime.now();
+  DateTime dateToday = DateTime.now();
 String date = dateToday.toString().substring(0, 10);
 
 void storeCode(BuildContext context, TextEditingController code) async {
   String enteredCode = code.text.trim();
 
   if (enteredCode.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please enter a code')),
+     ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Color(0xFF2452B1),
+        duration: const Duration(seconds: 3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: Colors.white, width: 2),
+        ),
+        content: const Text(
+          'Please enter a code',
+          style: TextStyle(
+            fontSize: 17,
+            color: Color(0xFFF1F4FF),
+          ),
+        ),
+      ),
     );
     return;
   }
@@ -22,25 +35,23 @@ void storeCode(BuildContext context, TextEditingController code) async {
 
   // Check if the entered code already exists in the local database
   if (existingCodes.any((element) => element['qrCode'] == enteredCode)) {
-    // Show SnackBar using ScaffoldMessenger
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: const Color(0xFF2452B1),
-        duration: const Duration(seconds: 3),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: Colors.white, width: 2),
-        ),
-        content: Text(
-          'Code already exists: $enteredCode',
-          style: TextStyle(
-            fontSize: 17,
-            color: Color(0xFFF1F4FF),
+   ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: const Color(0xFF2452B1),
+          duration: const Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(color: Colors.white, width: 2),
+          ),
+          content: Text(
+            'Code already exists: $enteredCode',
+            style: TextStyle(
+              fontSize: 17,
+              color: Color(0xFFF1F4FF),
+            ),
           ),
         ),
-      ),
-    );
-
+      );
     return;
   }
 
@@ -54,22 +65,21 @@ void storeCode(BuildContext context, TextEditingController code) async {
   await dbHelper.insertQRCode(newCode);
 
   // Show a success message using a SnackBar
-
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor: const Color(0xFF2452B1),
-      duration: const Duration(seconds: 3),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(color: Colors.white, width: 2),
-      ),
-      content: Text(
-        'Code stored successfully!',
-        style: TextStyle(
-          fontSize: 17,
-          color: Color(0xFFF1F4FF),
+      SnackBar(
+        backgroundColor: const Color(0xFF2452B1),
+        duration: const Duration(seconds: 3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: Colors.white, width: 2),
+        ),
+        content: Text(
+          'Code stored successfully!',
+          style: TextStyle(
+            fontSize: 17,
+            color: Color(0xFFF1F4FF),
+          ),
         ),
       ),
-    ),
-  );
+    );
 }
