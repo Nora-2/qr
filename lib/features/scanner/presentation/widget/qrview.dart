@@ -32,19 +32,66 @@ class _QRViewExampleState extends State<QRViewExample> {
         child: BlocConsumer<ScannerCubit, ScannerState>(
           listener: (context, state) {
             if (state is QRCodeStored) {
-              debugPrint('QRCodeStored State Triggered'); // Debugging statement
+              debugPrint('QRCodeStored State Triggered');// Debugging statement
+              // Show SnackBar using ScaffoldMessenger
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('QR Code stored successfully!')),
+                SnackBar(
+                  backgroundColor: const Color(0xFF2452B1),
+                  duration: const Duration(seconds: 3),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(color: Colors.white, width: 2),
+                  ),
+                  content: Text(
+                    'QR Code stored successfully!',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Color(0xFFF1F4FF),
+                    ),
+                  ),
+                ),
               );
             } else if (state is QRCodeExists) {
-              debugPrint('QRCodeExists State Triggered with: ${state.qrCode}'); // Debugging statement
+              debugPrint(
+                  'QRCodeExists State Triggered with: ${state.qrCode}'); // Debugging statement
+              // Show SnackBar using ScaffoldMessenger
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('QR Code already exists: ${state.qrCode}')),
+                SnackBar(
+                  backgroundColor: const Color(0xFF2452B1),
+                  duration: const Duration(seconds: 3),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(color: Colors.white, width: 2),
+                  ),
+                  content: Text(
+                    'QR Code already exists: ${state.qrCode}',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Color(0xFFF1F4FF),
+                    ),
+                  ),
+                ),
               );
             } else if (state is QRCodeError) {
-              debugPrint('QRCodeError State Triggered with: ${state.error}'); // Debugging statement
+              debugPrint(
+                  'QRCodeError State Triggered with: ${state.error}'); // Debugging statement
+              // Show SnackBar using ScaffoldMessenger
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error storing QR Code: ${state.error}')),
+                SnackBar(
+                  backgroundColor: const Color(0xFF2452B1),
+                  duration: const Duration(seconds: 3),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(color: Colors.white, width: 2),
+                  ),
+                  content: Text(
+                    'Error storing QR Code: ${state.error}',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Color(0xFFF1F4FF),
+                    ),
+                  ),
+                ),
               );
             }
           },

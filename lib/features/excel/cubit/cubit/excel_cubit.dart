@@ -61,18 +61,49 @@ class ExcelCubit extends Cubit<ExcelState> {
       // Show dialog to inform user about successful download
       showdialogcustomconvert(context, filePath); // Implement this function as per your needs
 
+
       // Show SnackBar using ScaffoldMessenger
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Excel file downloaded successfully!')),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: const Color(0xFF2452B1),
+                  duration: const Duration(seconds: 3),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(color: Colors.white, width: 2),
+                  ),
+                  content: Text(
+                    'Excel file downloaded successfully!',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Color(0xFFF1F4FF),
+                    ),
+                  ),
+                ),
+              );
 
       // Emit success state
       emit(ExcelDownloadSuccess());
     } catch (e) {
-      // Handle error and show error message
+       
+      // Show SnackBar using ScaffoldMessenger
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to download data: $e')),
-      );
+                SnackBar(
+                  backgroundColor: const Color(0xFF2452B1),
+                  duration: const Duration(seconds: 3),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(color: Colors.white, width: 2),
+                  ),
+                  content: Text(
+                    'Failed to download data: $e',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Color(0xFFF1F4FF),
+                    ),
+                  ),
+                ),
+              );
+      
 
       // Emit failure state
       emit(ExcelDownloadFailed());
