@@ -18,9 +18,11 @@ class _DownloadDataScreenState extends State<DownloadDataScreen> {
           listener: (context, state) {},
           builder: (context, state) {
             return Scaffold(
-              body: ElevatedButton(
-                onPressed: () => ExcelCubit.get(context).downloadData,
-                child:const Text('Download Data as Excel'),
+              body: Center(
+                child: ElevatedButton(
+                  onPressed: () => ExcelCubit.get(context).downloadData(context),
+                  child:const Text('Download Data as Excel'),
+                ),
               ),
             );
           },

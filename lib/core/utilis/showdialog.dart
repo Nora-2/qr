@@ -39,7 +39,7 @@ Future<dynamic> showdialogcustomconvert(BuildContext context, String path) {
     builder: (BuildContext context) {
       return GiffyDialog.image(
         Image.asset(
-          'lib/assets/images/Download-rafiki.png',
+          'assets/images/Download-rafiki.png',
           height: 200,
           fit: BoxFit.cover,
         ),

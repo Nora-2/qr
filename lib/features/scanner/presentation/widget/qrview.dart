@@ -32,14 +32,17 @@ class _QRViewExampleState extends State<QRViewExample> {
         child: BlocConsumer<ScannerCubit, ScannerState>(
           listener: (context, state) {
             if (state is QRCodeStored) {
+              debugPrint('QRCodeStored State Triggered'); // Debugging statement
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('QR Code stored successfully!')),
+                const SnackBar(content: Text('QR Code stored successfully!')),
               );
             } else if (state is QRCodeExists) {
+              debugPrint('QRCodeExists State Triggered with: ${state.qrCode}'); // Debugging statement
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('QR Code already exists: ${state.qrCode}')),
               );
             } else if (state is QRCodeError) {
+              debugPrint('QRCodeError State Triggered with: ${state.error}'); // Debugging statement
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Error storing QR Code: ${state.error}')),
               );
