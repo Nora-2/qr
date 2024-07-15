@@ -2,6 +2,7 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
 import 'package:qr_code_app/features/core.dart';
@@ -82,40 +83,45 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
             ? const Center(child: Text('No data found'))
             : SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Barcode \n الباركود')),
-                    DataColumn(label: Text('DateTime \n التاريخ')),
-                    DataColumn(label: Text('Actions')),
-                  ],
-                  rows: _qrcodes.map<DataRow>((code) {
-                    return DataRow(
-                      cells: [
-                        DataCell(Text('${code['id']}')),
-                        DataCell(Text('${code['qrCode']}')),
-                        DataCell(Text('${code['datetime']}')),
-                        DataCell(
-                          IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(label: Text('ID')),
+                      DataColumn(label: Text('Barcode \n الباركود')),
+                      DataColumn(label: Text('DateTime \n التاريخ')),
+                      DataColumn(label: Text('Actions')),
+                    ],
+                    rows: _qrcodes.map<DataRow>((code) {
+                      return DataRow(
+                        cells: [
+                          DataCell(Text('${code['id']}')),
+                          DataCell(Container(
+                              width: 100, child: Text('${code['qrCode']}'))),
+                          DataCell(Text('${code['datetime']}')),
+                          DataCell(
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                              onPressed: () async {
+                                _deleteQRCode(context, code['id'],
+                                    _qrcodes.indexOf(code));
+                                await Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ViewDataScreen(),
+                                  ),
+                                );
+                              },
                             ),
-                            onPressed: () async {
-                              _deleteQRCode(
-                                  context, code['id'], _qrcodes.indexOf(code));
-                              await Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ViewDataScreen(),
-                                ),
-                              );
-                            },
                           ),
-                        ),
-                      ],
-                    );
-                  }).toList(),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 ),
               ));
   }
