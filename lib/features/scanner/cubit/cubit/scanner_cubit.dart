@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart'; // Import your DatabaseHelper
@@ -31,7 +32,7 @@ class ScannerCubit extends Cubit<ScannerState> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.black,
+          borderColor: primarycolor,
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,

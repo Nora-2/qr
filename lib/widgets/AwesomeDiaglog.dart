@@ -34,9 +34,8 @@ class customAwesomeDialog extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       desc: description,
-      descTextStyle: const TextStyle(
-        fontSize: 20,
-      ),
+      descTextStyle:
+          const TextStyle(fontSize: 20, fontFamily: 'PlayfairDisplay'),
       btnOk: ElevatedButton(
         onPressed: () {
           Navigator.of(context).pop();

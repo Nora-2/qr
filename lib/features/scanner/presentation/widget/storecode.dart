@@ -16,9 +16,9 @@ void storeCode(
             context: context,
             dialogType: DialogType.info,
             title: 'Info',
-            description: 'Please enter the Barcode ... \n ... من فضلك ادخل الباركود',
-            buttonColor: Color(0xff0098FF)
-            )
+            description:
+                'Please enter the Barcode ... \n ... من فضلك ادخل الباركود',
+            buttonColor: Color(0xff0098FF))
         .show();
 
     return;
@@ -32,17 +32,17 @@ void storeCode(
 
   // Check if the entered code already exists in the local database
   if (existingCodes.any((element) => element['qrCode'] == enteredCode)) {
-
     //Show AlertDialog
     customAwesomeDialog(
             context: context,
             dialogType: DialogType.error,
             title: 'Error',
             description:
-                'The Barcode already exists: $enteredCode \n هذا الباركود موجود بالفعل',
+                'The Barcode already exists \n هذا الباركود موجود بالفعل',
             buttonColor: Color(0xffD93E47))
         .show();
 
+    print('$enteredCode');
     return;
   }
 
@@ -64,5 +64,4 @@ void storeCode(
               'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
           buttonColor: Color(0xff00CA71))
       .show();
- 
 }
