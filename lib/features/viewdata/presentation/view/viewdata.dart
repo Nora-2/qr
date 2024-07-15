@@ -85,19 +85,22 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
                 child: DataTable(
                   columns: const [
                     DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('DateTime \n التاريخ')),
                     DataColumn(label: Text('Barcode \n الباركود')),
+                    DataColumn(label: Text('DateTime \n التاريخ')),
                     DataColumn(label: Text('Actions')),
                   ],
                   rows: _qrcodes.map<DataRow>((code) {
                     return DataRow(
                       cells: [
                         DataCell(Text('${code['id']}')),
-                        DataCell(Text('${code['datetime']}')),
                         DataCell(Text('${code['qrCode']}')),
+                        DataCell(Text('${code['datetime']}')),
                         DataCell(
                           IconButton(
-                            icon: const Icon(Icons.delete),
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
                             onPressed: () async {
                               _deleteQRCode(
                                   context, code['id'], _qrcodes.indexOf(code));
