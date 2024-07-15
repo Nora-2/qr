@@ -1,9 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, use_super_parameters
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
-import 'package:qr_code_app/features/core.dart';
+import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
+import 'package:qr_code_app/features/viewdata/presentation/widget/colunm.dart';
 
 class ViewDataScreen extends StatefulWidget {
   const ViewDataScreen({Key? key}) : super(key: key);
@@ -43,13 +45,10 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
       appBar: AppBar(
         backgroundColor: primarycolor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           color: Colors.white, // Use a different back icon
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Core()),
-            );
+            Navigator.pop(context);
           },
         ),
         title: const Text('View QR Codes',
@@ -82,24 +81,51 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
               itemBuilder: (context, index) {
                 var code = _qrcodes[index];
                 return Card(
-                  margin: const EdgeInsets.all(10),
-                  child: ListTile(
-                    title: Text('QR Code: ${code['qrCode']}'),
-                    subtitle: Text(
-                        'ID: ${code['id']}\n datatime ${code['datetime']}'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () async {
-                        _deleteQRCode(context, code['id'], index);
-                        await Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ViewDataScreen()),
-                        );
-                      },
-                    ),
-                  ),
-                );
+                    margin: const EdgeInsets.all(5),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                       
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10,right: 10),
+                            child: dataviewcolum(
+                              code: code,
+                              title: 'QR Code',
+                              value: '${code['qrCode']}',
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: dataviewcolum(
+                              code: code,
+                              title: 'ID',
+                              value: '${code['id']}',
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal:10.0),
+                            child: dataviewcolum(
+                              code: code,
+                              title: 'Datetime',
+                              value: '${code['datetime']}',
+                            ),
+                          ),
+                         const SizedBox(width: 50,),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () async {
+                              _deleteQRCode(context, code['id'], index);
+                              // await Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => const ViewDataScreen()),
+                              // );
+                            },
+                          ),
+                        ],
+                      ),
+                    ));
               },
             ),
     );
@@ -108,22 +134,26 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
   Future<void> _deleteAllQRCodes(BuildContext context) async {
     await _dbHelper.deleteAllQRCodes();
     _loadData(); // Wait for data to update
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('All QR Codes deleted successfully!'),
-        duration: Duration(seconds: 1),
-      ),
-    );
+    customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            title: 'Success',
+            description:
+                ' All QR Codes deleted successfully!,! \n تم مسح جميع الملفات بنجاح',
+            buttonColor: const Color(0xff00CA71))
+        .show();
   }
 
   Future<void> _deleteQRCode(BuildContext context, int id, int index) async {
     await _dbHelper.deleteQRCode(id);
     _loadData(); // Wait for data to update
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('QR Code deleted successfully!'),
-        duration: Duration(seconds: 1),
-      ),
-    );
+
+    customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            title: 'Success',
+            description: 'QR Code deleted successfully! \n تم مسح الكود بنجاح',
+            buttonColor: const Color(0xff00CA71))
+        .show();
   }
 }

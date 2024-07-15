@@ -3,7 +3,7 @@ import 'package:qr_code_app/features/excel/presentation/view/excel.dart';
 import 'package:qr_code_app/features/scanner/presentation/view/scanner.dart';
 import 'package:qr_code_app/features/viewdata/presentation/view/viewdata.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_app/widgets/CustomButton.dart';
+import 'package:qr_code_app/core/widgets/CustomButton.dart';
 
 class Core extends StatelessWidget {
   const Core({super.key});

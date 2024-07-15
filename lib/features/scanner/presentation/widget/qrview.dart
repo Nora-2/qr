@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/features/scanner/cubit/cubit/scanner_cubit.dart';
-import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
+import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
 
 class QRViewExample extends StatefulWidget {
   const QRViewExample({super.key});
- static String id = 'qrview';
- 
+  static String id = 'qrview';
+
   @override
   State<StatefulWidget> createState() => _QRViewExampleState();
 }
@@ -31,54 +31,50 @@ class _QRViewExampleState extends State<QRViewExample> {
 
   @override
   Widget build(BuildContext context) {
-      final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return BlocProvider(
         create: (context) => ScannerCubit(),
         child: BlocConsumer<ScannerCubit, ScannerState>(
           listener: (context, state) {
             if (state is QRCodeStored) {
-              debugPrint('QRCodeStored State Triggered');// Debugging statement
+              debugPrint('QRCodeStored State Triggered'); // Debugging statement
 
               // Show AlertDialog
-               customAwesomeDialog(
-          context: context,
-          dialogType: DialogType.success,
-          title: 'Success',
-          description:
-              'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
-          buttonColor: Color(0xff00CA71))
-      .show();
-      
+              customAwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.success,
+                      title: 'Success',
+                      description:
+                          'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
+                      buttonColor: const Color(0xff00CA71))
+                  .show();
             } else if (state is QRCodeExists) {
               debugPrint(
                   'QRCodeExists State Triggered with: ${state.qrCode}'); // Debugging statement
 
               // Show AlertDialog
-               customAwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            title: 'Error',
-            description:
-                'The Barcode already exists: ${ScannerCubit.get(context).result!.code} \n هذا الباركود موجود بالفعل',
-            buttonColor: Color(0xffD93E47))
-        .show();
-              
+              customAwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      title: 'Error',
+                      description:
+                          'The Barcode already exists: ${ScannerCubit.get(context).result!.code} \n هذا الباركود موجود بالفعل \n ${state.time}',
+                      buttonColor: buttoncolor)
+                  .show();
+            // } else if (state is QRCodeError) {
+            //   debugPrint(
+            //       'QRCodeError State Triggered with: ${state.error}'); // Debugging statement
 
-            } else if (state is QRCodeError) {
-              debugPrint(
-                  'QRCodeError State Triggered with: ${state.error}'); // Debugging statement
-
-                  // Show AlertDialog
-               customAwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            title: 'Error',
-            description:
-                'Error storing the Barcode : ${state.error} \n حدث خطأأثناء تخزين الباركود',
-            buttonColor: Color(0xffD93E47))
-        .show();
-              
+            //   // Show AlertDialog
+            //   customAwesomeDialog(
+            //           context: context,
+            //           dialogType: DialogType.error,
+            //           title: 'Error',
+            //           description:
+            //               'Error storing the Barcode : ${state.error} \n حدث خطأأثناء تخزين الباركود',
+            //           buttonColor: buttoncolor)
+            //       .show();
             }
           },
           builder: (context, state) {
@@ -96,36 +92,42 @@ class _QRViewExampleState extends State<QRViewExample> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           if (ScannerCubit.get(context).result != null)
-                            Text(
-                                'Code: ${ScannerCubit.get(context).result!.code}',style:const TextStyle(fontSize: 18),)
+                            Card(
+margin:EdgeInsets.all(8),
+                              child: Text(
+                                'Code: ${ScannerCubit.get(context).result!.code}',
+                                style: const TextStyle(fontSize: 8),
+                              ),
+                            )
                           else
-                             Padding(
-                               padding: const EdgeInsets.all(10.0),
-                               child: SizedBox(
-                                                 width: width * 0.84,
-                                                 height: height * 0.07,
-                                                 child: ElevatedButton(
-                                                   style: ElevatedButton.styleFrom(
-                                                     foregroundColor: Colors.white,
-                                                     backgroundColor:  primarycolor,
-                                                     shadowColor: Colors.grey, // Shadow color
-                                                     elevation: 5, // Elevation
-                                                     shape: RoundedRectangleBorder(
-                                                       borderRadius: BorderRadius.circular(8),
-                                                     ),
-                                                   ),
-                                                   onPressed: () => ScannerCubit.get(context).startSingleScan(),
-                                                   child: const Text(
-                                                     'Scan Code',
-                                                     style: TextStyle(
-                                                         color: Colors.white,
-                                                         fontSize: 25,
-                                                         fontFamily: 'MulishRomanBold',
-                                                         fontWeight: FontWeight.bold),
-                                                   ),
-                                                 ),
-                                               ),
-                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: SizedBox(
+                                width: width * 0.84,
+                                height: height * 0.07,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: primarycolor,
+                                    shadowColor: Colors.grey, // Shadow color
+                                    elevation: 5, // Elevation
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  onPressed: () => ScannerCubit.get(context)
+                                      .startSingleScan(),
+                                  child: const Text(
+                                    'Scan Code',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 25,
+                                        fontFamily: 'MulishRomanBold',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),

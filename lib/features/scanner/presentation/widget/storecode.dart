@@ -1,10 +1,14 @@
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
-import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
+import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
 
-DateTime dateToday = DateTime.now();
-String date = dateToday.toString().substring(0, 10);
+DateTime now = DateTime.now();
+String date =
+    'Date-${now.year}/${now.month}/${now.day} Time-${now.hour}:${now.minute}';
 
 void storeCode(
     BuildContext context, TextEditingController codeController) async {
@@ -16,9 +20,9 @@ void storeCode(
             context: context,
             dialogType: DialogType.info,
             title: 'Info',
-            description: 'Please enter the Barcode ... \n ... من فضلك ادخل الباركود',
-            buttonColor: Color(0xff0098FF)
-            )
+            description:
+                'Please enter the Barcode ... \n ... من فضلك ادخل الباركود',
+            buttonColor: primarycolor)
         .show();
 
     return;
@@ -29,19 +33,23 @@ void storeCode(
 
   // Query all existing QR codes from the local database
   List<Map<String, dynamic>> existingCodes = await dbHelper.queryAllQRCodes();
-
-  // Check if the entered code already exists in the local database
-  if (existingCodes.any((element) => element['qrCode'] == enteredCode)) {
-
-    //Show AlertDialog
-    customAwesomeDialog(
+for (var i in existingCodes) {
+        if (i['qrCode'] == enteredCode) {
+        var  time = i['datetime'];
+         customAwesomeDialog(
             context: context,
             dialogType: DialogType.error,
             title: 'Error',
             description:
-                'The Barcode already exists: $enteredCode \n هذا الباركود موجود بالفعل',
-            buttonColor: Color(0xffD93E47))
+                'The Barcode already exists: $enteredCode \n هذا الباركود موجود بالفعل\n datetime:${time}',
+            buttonColor: buttoncolor)
         .show();
+        }
+      }
+  // Check if the entered code already exists in the local database
+  if (existingCodes.any((element) => element['qrCode'] == enteredCode)) {
+    //Show AlertDialog
+    
 
     return;
   }
@@ -56,13 +64,14 @@ void storeCode(
   await dbHelper.insertQRCode(newCode);
 
   //Show AlertDialog
-  customAwesomeDialog(
-          context: context,
-          dialogType: DialogType.success,
-          title: 'Success',
-          description:
-              'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
-          buttonColor: Color(0xff00CA71))
-      .show();
- 
+  if (enteredCode.isNotEmpty) {
+    customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            title: 'Success',
+            description:
+                'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
+            buttonColor: Color(0xff00CA71))
+        .show();
+  }
 }
