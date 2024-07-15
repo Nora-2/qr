@@ -46,7 +46,7 @@ class _QRViewExampleState extends State<QRViewExample> {
           dialogType: DialogType.success,
           title: 'Success',
           description:
-              'The barcode stored successfully! \n تم حفظ الباركود بنجاح',
+              'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
           buttonColor: Color(0xff00CA71))
       .show();
       
@@ -60,7 +60,7 @@ class _QRViewExampleState extends State<QRViewExample> {
             dialogType: DialogType.error,
             title: 'Error',
             description:
-                'The barcode already exists: ${ScannerCubit.get(context).result!.code} \n هذا الباركود موجود بالفعل',
+                'The Barcode already exists: ${ScannerCubit.get(context).result!.code} \n هذا الباركود موجود بالفعل',
             buttonColor: Color(0xffD93E47))
         .show();
               
@@ -75,7 +75,7 @@ class _QRViewExampleState extends State<QRViewExample> {
             dialogType: DialogType.error,
             title: 'Error',
             description:
-                'Error storing the barcode : ${state.error} \n حدث خطأأثناء تخزين الباركود',
+                'Error storing the Barcode : ${state.error} \n حدث خطأأثناء تخزين الباركود',
             buttonColor: Color(0xffD93E47))
         .show();
               

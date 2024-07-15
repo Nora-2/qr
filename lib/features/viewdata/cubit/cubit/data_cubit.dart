@@ -1,6 +1,8 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
+import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
 
 part 'data_state.dart';
 
@@ -16,15 +18,30 @@ class DataCubit extends Cubit<DataState> {
       await dbHelper.rearrangeIds(); // Rearrange IDs after deletion
       emit(DataDeletedSuccessfully());
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('QR Code deleted successfully!')),
-      );
+
+        //Show AlertDialog
+  customAwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          title: 'Success',
+          description:
+              'The Barcode deleted successfully! \n تم حذف الباركود بنجاح',
+          buttonColor: Color(0xff00CA71))
+      .show();
+     
     } catch (e) {
       emit(DataDeletionError());
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting QR Code: $e')),
-      );
+      
+       //Show AlertDialog
+    customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            title: 'Error',
+            description:
+                'Error deleting the Barcode: $e \n خطأ في حذف الباركود',
+            buttonColor: Color(0xffD93E47))
+        .show();
+      
     }
   }
 
@@ -34,14 +51,31 @@ class DataCubit extends Cubit<DataState> {
       await dbHelper.deleteAllQRCodes();
       await dbHelper.resetIds(); // Reset IDs after deleting all data
       emit(AllDataDeletedSuccessfully());
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('All QR Codes deleted successfully!')),
-      );
+
+          //Show AlertDialog
+  customAwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          title: 'Success',
+          description:
+              'All Barcodes deleted successfully! \n تم حذف الباركود بنجاح',
+          buttonColor: Color(0xff00CA71))
+      .show();
+
     } catch (e) {
       emit(DataDeletionError());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting all QR Codes: $e')),
-      );
+      
+       //Show AlertDialog
+    customAwesomeDialog(
+            context: context,
+            dialogType: DialogType.error,
+            title: 'Error',
+            description:
+                'Error deleting all the Barcodes: $e \n خطأ في حذف كل الباركود',
+            buttonColor: Color(0xffD93E47))
+        .show();
+
+     
     }
   }
 }

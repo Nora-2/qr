@@ -16,7 +16,7 @@ void storeCode(
             context: context,
             dialogType: DialogType.info,
             title: 'Info',
-            description: 'Please enter the barcode ... \n ... من فضلك ادخل الباركود',
+            description: 'Please enter the Barcode ... \n ... من فضلك ادخل الباركود',
             buttonColor: Color(0xff0098FF)
             )
         .show();
@@ -39,7 +39,7 @@ void storeCode(
             dialogType: DialogType.error,
             title: 'Error',
             description:
-                'The barcode already exists: $enteredCode \n هذا الباركود موجود بالفعل',
+                'The Barcode already exists: $enteredCode \n هذا الباركود موجود بالفعل',
             buttonColor: Color(0xffD93E47))
         .show();
 
@@ -61,7 +61,7 @@ void storeCode(
           dialogType: DialogType.success,
           title: 'Success',
           description:
-              'The barcode stored successfully! \n تم حفظ الباركود بنجاح',
+              'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
           buttonColor: Color(0xff00CA71))
       .show();
  
