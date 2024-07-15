@@ -82,7 +82,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
         body: _qrcodes.isEmpty
             ? const Center(child: Text('No data found'))
             : SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: DataTable(
