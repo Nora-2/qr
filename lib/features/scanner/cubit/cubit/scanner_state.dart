@@ -9,9 +9,8 @@ class QRCodeStored extends ScannerState {}
 
 class QRCodeExists extends ScannerState {
   final String qrCode;
-  final String time;
 
-  QRCodeExists(this.qrCode, this.time);
+  QRCodeExists(this.qrCode);
 }
 
 class QRCodeError extends ScannerState {

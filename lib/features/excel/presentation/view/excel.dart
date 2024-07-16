@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/features/excel/cubit/cubit/excel_cubit.dart';
-import 'package:qr_code_app/core/widgets/toppart.dart';
+import 'package:qr_code_app/widgets/toppart.dart';
 
 class DownloadDataScreen extends StatefulWidget {
   const DownloadDataScreen({super.key});

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/features/scanner/cubit/cubit/scanner_cubit.dart';
-import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
+import 'package:qr_code_app/features/scanner/presentation/view/scanner.dart';
+import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
 
 class QRViewExample extends StatefulWidget {
   const QRViewExample({super.key});
@@ -47,7 +48,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                       title: 'Success',
                       description:
                           'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
-                      buttonColor: const Color(0xff00CA71))
+                      buttonColor: Color(0xff00CA71))
                   .show();
             } else if (state is QRCodeExists) {
               debugPrint(
@@ -59,28 +60,47 @@ class _QRViewExampleState extends State<QRViewExample> {
                       dialogType: DialogType.error,
                       title: 'Error',
                       description:
-                          'The Barcode already exists: ${ScannerCubit.get(context).result!.code} \n هذا الباركود موجود بالفعل \n ${state.time}',
-                      buttonColor: buttoncolor)
+                          'The Barcode already exists: ${ScannerCubit.get(context).result!.code} \n هذا الباركود موجود بالفعل',
+                      buttonColor: Color(0xffD93E47))
                   .show();
-            // } else if (state is QRCodeError) {
-            //   debugPrint(
-            //       'QRCodeError State Triggered with: ${state.error}'); // Debugging statement
+            } else if (state is QRCodeError) {
+              debugPrint(
+                  'QRCodeError State Triggered with: ${state.error}'); // Debugging statement
 
-            //   // Show AlertDialog
-            //   customAwesomeDialog(
-            //           context: context,
-            //           dialogType: DialogType.error,
-            //           title: 'Error',
-            //           description:
-            //               'Error storing the Barcode : ${state.error} \n حدث خطأأثناء تخزين الباركود',
-            //           buttonColor: buttoncolor)
-            //       .show();
+              // Show AlertDialog
+              customAwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.error,
+                      title: 'Error',
+                      description:
+                          'Error storing the Barcode : ${state.error} \n حدث خطأأثناء تخزين الباركود',
+                      buttonColor: Color(0xffD93E47))
+                  .show();
             }
           },
           builder: (context, state) {
             return Scaffold(
               body: Column(
                 children: <Widget>[
+                  AppBar(
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      color: primarycolor, // Use a different back icon
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Scanner()),
+                        );
+                      },
+                    ),
+                    title: Text(
+                      'QR Scanner',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: primarycolor),
+                    ),
+                  ),
                   Expanded(
                       flex: 4,
                       child: ScannerCubit.get(context).buildQrView(context)),
@@ -92,12 +112,9 @@ class _QRViewExampleState extends State<QRViewExample> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           if (ScannerCubit.get(context).result != null)
-                            Card(
-margin:EdgeInsets.all(8),
-                              child: Text(
-                                'Code: ${ScannerCubit.get(context).result!.code}',
-                                style: const TextStyle(fontSize: 8),
-                              ),
+                            Text(
+                              'Code: ${ScannerCubit.get(context).result!.code}',
+                              style: const TextStyle(fontSize: 18),
                             )
                           else
                             Padding(

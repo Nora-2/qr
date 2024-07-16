@@ -3,7 +3,7 @@ import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/features/scanner/presentation/widget/customformfield.dart';
 import 'package:qr_code_app/features/scanner/presentation/widget/qrview.dart';
 import 'package:qr_code_app/features/scanner/presentation/widget/storecode.dart';
-import 'package:qr_code_app/core/widgets/toppart.dart';
+import 'package:qr_code_app/widgets/toppart.dart';
 
 DateTime now = DateTime.now();
 String formattedTime =

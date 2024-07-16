@@ -3,15 +3,15 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
-import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
+import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart'; // Import your DatabaseHelper
 
 part 'scanner_state.dart';
 
-DateTime now = DateTime.now();
-String date =
-    'Date-${now.year}/${now.month}/${now.day} Time-${now.hour}:${now.minute}';
+
+DateTime dateToday = DateTime.now();
+String date = dateToday.toString().substring(0, 10);
 
 class ScannerCubit extends Cubit<ScannerState> {
   ScannerCubit() : super(ScannerInitial());
@@ -33,7 +33,7 @@ class ScannerCubit extends Cubit<ScannerState> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.black,
+          borderColor: primarycolor,
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
@@ -69,9 +69,7 @@ class ScannerCubit extends Cubit<ScannerState> {
     return nextId;
   }
 
-  Future<void> checkAndStoreQRCode(
-    String? qrCode,
-  ) async {
+  Future<void> checkAndStoreQRCode(String? qrCode) async {
     if (qrCode == null) return;
 
     try {
@@ -83,15 +81,8 @@ class ScannerCubit extends Cubit<ScannerState> {
       // Check if the QR code already exists in the local database
       List<Map<String, dynamic>> existingCodes =
           await dbHelper.queryAllQRCodes();
-
-      for (var i in existingCodes) {
-        if (i['qrCode'] == qrCode) {
-        var  time = i['datetime'];
-          emit(QRCodeExists(qrCode,time));
-        }
-      }
       if (existingCodes.any((element) => element['qrCode'] == qrCode)) {
-        // emit(QRCodeExists(qrCode));
+        emit(QRCodeExists(qrCode));
         return;
       }
 
@@ -118,7 +109,7 @@ class ScannerCubit extends Cubit<ScannerState> {
               title: 'Error',
               description:
                   'No permission to access the camera \n لا تصريح بالوصول إلى الكاميرا',
-              buttonColor: buttoncolor)
+              buttonColor: Color(0xffD93E47))
           .show();
     }
   }
