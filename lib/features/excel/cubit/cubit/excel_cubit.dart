@@ -72,7 +72,7 @@ class ExcelCubit extends Cubit<ExcelState> {
               title: 'Success',
               description:
                   'Excel file downloaded successfully! \n تم تنزيل ملف اكسل بنجاح',
-              buttonColor: Color(0xff00CA71))
+              buttonColor: const Color(0xff00CA71))
           .show();
 
       // Emit success state
@@ -84,9 +84,10 @@ class ExcelCubit extends Cubit<ExcelState> {
               dialogType: DialogType.error,
               title: 'Error',
               description: 'Failed to download Excel \n فشل في تنزيل ملف اكسل',
-              buttonColor: Color(0xffD93E47))
+              buttonColor: const Color(0xffD93E47))
           .show();
 
+      // ignore: avoid_print
       print('$e');
       // Emit failure state
       emit(ExcelDownloadFailed());

@@ -41,6 +41,7 @@ for (var i in existingCodes) {
             dialogType: DialogType.error,
             title: 'Error',
             description:
+                // ignore: unnecessary_brace_in_string_interps
                 'The Barcode already exists: $enteredCode \n هذا الباركود موجود بالفعل\n datetime:${time}',
             buttonColor: Colors.red)
         .show();

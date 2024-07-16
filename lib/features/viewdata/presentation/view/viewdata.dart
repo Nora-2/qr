@@ -2,16 +2,16 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
 import 'package:qr_code_app/features/core.dart';
 import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
 
 class ViewDataScreen extends StatefulWidget {
-  const ViewDataScreen({Key? key}) : super(key: key);
+  const ViewDataScreen({super.key});
   static String id = 'viewdata';
   @override
+  // ignore: library_private_types_in_public_api
   _ViewDataScreenState createState() => _ViewDataScreenState();
 }
 
@@ -46,12 +46,12 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
         appBar: AppBar(
           backgroundColor: primarycolor,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios),
             color: Colors.white, // Use a different back icon
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Core()),
+                MaterialPageRoute(builder: (context) => const Core()),
               );
             },
           ),
@@ -96,6 +96,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
                       return DataRow(
                         cells: [
                           DataCell(Text('${code['id']}')),
+                          // ignore: sized_box_for_whitespace
                           DataCell(Container(
                               width: 100, child: Text('${code['qrCode']}'))),
                           DataCell(Text('${code['datetime']}')),
@@ -124,7 +125,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
                                         },
                                         description:
                                             'The Barcode deleted successfully! \n تم حذف هذا الباركود بنجاح',
-                                        buttonColor: Color(0xff00CA71))
+                                        buttonColor: const Color(0xff00CA71))
                                     .show();
                               },
                             ),
@@ -150,7 +151,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
             title: 'Success',
             description:
                 'All Barcodes deleted successfully! \n تم حذف كل الباركود بنجاح',
-            buttonColor: Color(0xff00CA71))
+            buttonColor: const Color(0xff00CA71))
         .show();
   }
 

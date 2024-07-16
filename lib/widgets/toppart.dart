@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_app/features/core.dart';
 
+// ignore: camel_case_types
 class toppart extends StatelessWidget {
   const toppart({
     super.key,

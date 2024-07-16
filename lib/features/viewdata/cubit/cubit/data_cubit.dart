@@ -20,26 +20,29 @@ class DataCubit extends Cubit<DataState> {
 
       //Show AlertDialog
       customAwesomeDialog(
+              // ignore: use_build_context_synchronously
               context: context,
               dialogType: DialogType.success,
               title: 'Success',
               description:
                   'The Barcode deleted successfully! \n تم حذف هذا الباركود بنجاح',
-              buttonColor: Color(0xff00CA71))
+              buttonColor: const Color(0xff00CA71))
           .show();
     } catch (e) {
       emit(DataDeletionError());
 
       //Show AlertDialog
       customAwesomeDialog(
+              // ignore: use_build_context_synchronously
               context: context,
               dialogType: DialogType.error,
               title: 'Error',
               description:
                   'Error deleting the Barcode \n خطأ في حذف هذا الباركود',
-              buttonColor: Color(0xffD93E47))
+              buttonColor: const Color(0xffD93E47))
           .show();
 
+      // ignore: avoid_print
       print('$e');
     }
   }
@@ -53,26 +56,29 @@ class DataCubit extends Cubit<DataState> {
 
       //Show AlertDialog
       customAwesomeDialog(
+              // ignore: use_build_context_synchronously
               context: context,
               dialogType: DialogType.success,
               title: 'Success',
               description:
                   'All Barcodes deleted successfully! \n تم حذف الباركود كل بنجاح',
-              buttonColor: Color(0xff00CA71))
+              buttonColor: const Color(0xff00CA71))
           .show();
     } catch (e) {
       emit(DataDeletionError());
 
       //Show AlertDialog
       customAwesomeDialog(
+              // ignore: use_build_context_synchronously
               context: context,
               dialogType: DialogType.error,
               title: 'Error',
               description:
                   'Error deleting all the Barcodes \n خطأ في حذف كل الباركود',
-              buttonColor: Color(0xffD93E47))
+              buttonColor: const Color(0xffD93E47))
           .show();
 
+      // ignore: avoid_print
       print('$e');
     }
   }

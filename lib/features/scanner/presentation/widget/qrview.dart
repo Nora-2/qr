@@ -48,7 +48,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                       title: 'Success',
                       description:
                           'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
-                      buttonColor: Color(0xff00CA71))
+                      buttonColor: const Color(0xff00CA71))
                   .show();
             } else if (state is QRCodeExists) {
               debugPrint(
@@ -74,7 +74,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                       title: 'Error',
                       description:
                           'Error storing the Barcode : ${state.error} \n حدث خطأأثناء تخزين الباركود',
-                      buttonColor: Color(0xffD93E47))
+                      buttonColor: const Color(0xffD93E47))
                   .show();
             }
           },
@@ -83,9 +83,10 @@ class _QRViewExampleState extends State<QRViewExample> {
               body: Column(
                 children: <Widget>[
                   AppBar(
+                    backgroundColor: primarycolor,
                     leading: IconButton(
-                      icon: Icon(Icons.arrow_back_ios),
-                      color: primarycolor, // Use a different back icon
+                      icon: const Icon(Icons.arrow_back_ios),
+                      color: Colors.white, // Use a different back icon
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -93,12 +94,12 @@ class _QRViewExampleState extends State<QRViewExample> {
                         );
                       },
                     ),
-                    title: Text(
+                    title: const Text(
                       'QR Scanner',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: primarycolor),
+                          color: Colors.white),
                     ),
                   ),
                   Expanded(
@@ -117,7 +118,6 @@ class _QRViewExampleState extends State<QRViewExample> {
                               style: const TextStyle(fontSize: 18),
                             )
                           else
-                          
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: SizedBox(
@@ -133,7 +133,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                    onPressed: () => ScannerCubit.get(context)
+                                  onPressed: () => ScannerCubit.get(context)
                                       .startSingleScan(),
                                   child: const Text(
                                     'Scan Code',
