@@ -115,6 +115,17 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
                                         const ViewDataScreen(),
                                   ),
                                 );
+                                customAwesomeDialog(
+                                        context: context,
+                                        dialogType: DialogType.success,
+                                        title: 'Success',
+                                        onOkPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        description:
+                                            'The Barcode deleted successfully! \n تم حذف هذا الباركود بنجاح',
+                                        buttonColor: Color(0xff00CA71))
+                                    .show();
                               },
                             ),
                           ),
@@ -132,6 +143,9 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
 
     customAwesomeDialog(
             context: context,
+            onOkPressed: () {
+              Navigator.pop(context);
+            },
             dialogType: DialogType.success,
             title: 'Success',
             description:
@@ -143,15 +157,6 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
   Future<void> _deleteQRCode(BuildContext context, int id, int index) async {
     await _dbHelper.deleteQRCode(id);
     _loadData(); // Wait for data to update
-
-    customAwesomeDialog(
-            context: context,
-            dialogType: DialogType.success,
-            title: 'Success',
-            description:
-                'The Barcode deleted successfully! \n تم حذف هذا الباركود بنجاح',
-            buttonColor: Color(0xff00CA71))
-        .show();
   }
 }
 

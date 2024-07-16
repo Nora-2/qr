@@ -1,3 +1,4 @@
+
 import 'dart:developer';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +10,10 @@ import 'package:qr_code_app/core/utilis/databasehelper.dart'; // Import your Dat
 
 part 'scanner_state.dart';
 
+DateTime now = DateTime.now();
+String date =
+    'Date-${now.year}/${now.month}/${now.day} Time-${now.hour}:${now.minute}:${now.second}';
 
-DateTime dateToday = DateTime.now();
-String date = dateToday.toString().substring(0, 10);
 
 class ScannerCubit extends Cubit<ScannerState> {
   ScannerCubit() : super(ScannerInitial());
@@ -22,7 +24,6 @@ class ScannerCubit extends Cubit<ScannerState> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   bool isScanning = false;
-  int currentId = 1; // Current ID variable
 
   Widget buildQrView(BuildContext context) {
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
@@ -46,60 +47,59 @@ class ScannerCubit extends Cubit<ScannerState> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       if (!isScanning) {
-        return;
+        result = scanData;
+        isScanning = true;
+        controller.pauseCamera();
+        checkAndStoreQRCode(scanData.code);
       }
-
-      result = scanData;
-      isScanning = false;
-      controller.pauseCamera();
-      checkAndStoreQRCode(scanData.code);
     });
-  }
 
-  void startSingleScan() {
-    result = null;
-    isScanning = true;
-    controller?.resumeCamera();
-  }
-
-  Future<int> _getNextId() async {
-    DatabaseHelper dbHelper = DatabaseHelper();
-    List<Map<String, dynamic>> codes = await dbHelper.queryAllQRCodes();
-    int nextId = codes.isNotEmpty ? codes.last['id'] + 1 : 1;
-    return nextId;
+    // Start scanning automatically
+    controller.resumeCamera();
   }
 
   Future<void> checkAndStoreQRCode(String? qrCode) async {
     if (qrCode == null) return;
 
     try {
-      int docId = await _getNextId(); // Get the current ID
-
       // Initialize the DatabaseHelper instance
       DatabaseHelper dbHelper = DatabaseHelper();
 
       // Check if the QR code already exists in the local database
       List<Map<String, dynamic>> existingCodes =
           await dbHelper.queryAllQRCodes();
+    for (var i in existingCodes) {
+        if (i['qrCode'] == qrCode) {
+        var  time = i['datetime'];
+          emit(QRCodeExists(qrCode,time));
+        }
+      }
       if (existingCodes.any((element) => element['qrCode'] == qrCode)) {
-        emit(QRCodeExists(qrCode));
+        // emit(QRCodeExists(qrCode));
         return;
       }
 
       // If it doesn't exist, proceed to store it
       Map<String, dynamic> newCode = {
-        'id': docId,
         'qrCode': qrCode,
         'datetime': date,
       };
       await dbHelper.insertQRCode(newCode);
 
       emit(QRCodeStored());
+      isScanning = false; // Reset scanning state
+      controller?.resumeCamera(); // Resume camera for next scan
     } catch (e) {
       emit(QRCodeError(e.toString()));
+      isScanning = false; // Reset scanning state in case of error
+      controller?.resumeCamera(); // Resume camera for next scan
     }
   }
-
+  void startSingleScan() {
+    result = null;
+    isScanning = true;
+    controller?.resumeCamera();
+  }
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
@@ -109,7 +109,7 @@ class ScannerCubit extends Cubit<ScannerState> {
               title: 'Error',
               description:
                   'No permission to access the camera \n لا تصريح بالوصول إلى الكاميرا',
-              buttonColor: Color(0xffD93E47))
+              buttonColor:const Color(0xffD93E47))
           .show();
     }
   }

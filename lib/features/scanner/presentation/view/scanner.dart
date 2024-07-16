@@ -79,6 +79,9 @@ class Scanner extends StatelessWidget {
                         color: Colors.black,
                       ),
                       controller: code,
+                      onsubmit:  (value) {
+                              storeCode(context, code);
+                            },
                     ),
                   ),
                   SizedBox(

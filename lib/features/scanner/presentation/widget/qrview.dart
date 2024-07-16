@@ -60,8 +60,8 @@ class _QRViewExampleState extends State<QRViewExample> {
                       dialogType: DialogType.error,
                       title: 'Error',
                       description:
-                          'The Barcode already exists: ${ScannerCubit.get(context).result!.code} \n هذا الباركود موجود بالفعل',
-                      buttonColor: Color(0xffD93E47))
+                          'The Barcode already exists: ${ScannerCubit.get(context).result!.code} \n هذا الباركود موجود بالفعل \n ${state.time}',
+                      buttonColor: Colors.red)
                   .show();
             } else if (state is QRCodeError) {
               debugPrint(
@@ -117,6 +117,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                               style: const TextStyle(fontSize: 18),
                             )
                           else
+                          
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: SizedBox(
@@ -132,7 +133,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
-                                  onPressed: () => ScannerCubit.get(context)
+                                    onPressed: () => ScannerCubit.get(context)
                                       .startSingleScan(),
                                   child: const Text(
                                     'Scan Code',
