@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, avoid_single_cascade_in_expression_statements, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -24,16 +24,19 @@ class customAwesomeDialog extends StatelessWidget {
     this.onOkPressed,
   });
 
-  void playErrorSound() async {
-    await audio.play(AssetSource('assets/audios/Error.mp3'));
+  Future<void> playErrorSound() async {
+    try {
+      await audio.play(AssetSource('audios/Error.mp3'));
+      print('Sound played successfully');
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   void show() {
-    if (description =='The Barcode already exists:') {
+    if (title == 'Error') {
       playErrorSound();
     }
-
-    // ignore: avoid_single_cascade_in_expression_statements
     AwesomeDialog(
       context: context,
       animType: AnimType.scale,
@@ -44,8 +47,7 @@ class customAwesomeDialog extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       desc: description,
-      descTextStyle:
-          const TextStyle(fontSize: 20, fontFamily: 'PlayfairDisplay'),
+      descTextStyle: const TextStyle(fontSize: 20, fontFamily: 'PlayfairDisplay'),
       btnOk: ElevatedButton(
         onPressed: () {
           Navigator.of(context).pop();
