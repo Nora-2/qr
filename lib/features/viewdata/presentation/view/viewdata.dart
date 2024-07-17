@@ -38,7 +38,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
     if (id.isEmpty) {
       qrcodes = [];
     } else {
-      qrcodes = await _dbHelper.queryQRCodes(id);
+      qrcodes = await _dbHelper.queryQRCodeById(id);
     }
     setState(() {
       _qrcodes = qrcodes;
@@ -51,7 +51,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
     if (qr.isEmpty) {
       qrcodes = [];
     } else {
-      qrcodes = await _dbHelper.queryQRCodes(qr);
+      qrcodes = await _dbHelper.queryQRCodeBycode(qr);
     }
     setState(() {
       _qrcodes = qrcodes;
@@ -64,7 +64,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
     if (qr.isEmpty) {
       qrcodes = [];
     } else {
-      qrcodes = await _dbHelper.queryQRCodes(qr);
+      qrcodes = await _dbHelper.queryQRCodeBytime(qr);
     }
     setState(() {
       _qrcodes = qrcodes;
