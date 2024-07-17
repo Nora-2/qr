@@ -8,14 +8,14 @@ import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
 
 DateTime now = DateTime.now();
 String date =
-    'Date-${now.year}/${now.month}/${now.day} Time-${now.hour}:${now.minute}';
+    '${now.year}/${now.month}/${now.day}-${now.hour}:${now.minute}';
 
 void storeCode(
     BuildContext context, TextEditingController codeController) async {
   String enteredCode = codeController.text.trim();
 
   if (enteredCode.isEmpty) {
-    //Show AlertDialog
+    // Show AlertDialog
     customAwesomeDialog(
             context: context,
             dialogType: DialogType.info,
@@ -32,26 +32,26 @@ void storeCode(
   DatabaseHelper dbHelper = DatabaseHelper();
 
   // Query all existing QR codes from the local database
-  List<Map<String, dynamic>> existingCodes = await dbHelper.queryAllQRCodes();
-for (var i in existingCodes) {
-        if (i['qrCode'] == enteredCode) {
-        var  time = i['datetime'];
-         customAwesomeDialog(
+  List<Map<String, dynamic>> existingCodesList = await dbHelper.queryAllQRCodes();
+  
+  // Create a HashMap for fast lookup
+  var existingCodesMap = <String, Map<String, dynamic>>{};
+  for (var code in existingCodesList) {
+    existingCodesMap[code['qrCode']] = code;
+  }
+
+  // Check if the entered code already exists in the local database
+  if (existingCodesMap.containsKey(enteredCode)) {
+    var time = existingCodesMap[enteredCode]!['datetime'];
+    // Show AlertDialog
+    customAwesomeDialog(
             context: context,
             dialogType: DialogType.error,
             title: 'Error',
             description:
-                // ignore: unnecessary_brace_in_string_interps
-                'The Barcode already exists: $enteredCode \n هذا الباركود موجود بالفعل\n datetime:${time}',
+                'The Barcode already exists: $enteredCode \n هذا الباركود موجود بالفعل\n datetime: $time',
             buttonColor: Colors.red)
         .show();
-        }
-      }
-  // Check if the entered code already exists in the local database
-  if (existingCodes.any((element) => element['qrCode'] == enteredCode)) {
-    //Show AlertDialog
-    
-
     return;
   }
 
@@ -64,7 +64,7 @@ for (var i in existingCodes) {
   // Insert the new QR code into the local database
   await dbHelper.insertQRCode(newCode);
 
-  //Show AlertDialog
+  // Show AlertDialog
   if (enteredCode.isNotEmpty) {
     customAwesomeDialog(
             context: context,

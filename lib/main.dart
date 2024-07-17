@@ -7,7 +7,6 @@ import 'package:qr_code_app/features/welcome.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
 }

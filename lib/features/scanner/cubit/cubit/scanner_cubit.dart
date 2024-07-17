@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +11,7 @@ part 'scanner_state.dart';
 
 DateTime now = DateTime.now();
 String date =
-    'Date-${now.year}/${now.month}/${now.day} Time-${now.hour}:${now.minute}:${now.second}';
-
+    '${now.year}/${now.month}/${now.day}-${now.hour}:${now.minute}:${now.second}';
 
 class ScannerCubit extends Cubit<ScannerState> {
   ScannerCubit() : super(ScannerInitial());
@@ -65,17 +63,20 @@ class ScannerCubit extends Cubit<ScannerState> {
       // Initialize the DatabaseHelper instance
       DatabaseHelper dbHelper = DatabaseHelper();
 
-      // Check if the QR code already exists in the local database
-      List<Map<String, dynamic>> existingCodes =
+      // Fetch all QR codes and store them in a HashMap for fast lookup
+      List<Map<String, dynamic>> existingCodesList =
           await dbHelper.queryAllQRCodes();
-    for (var i in existingCodes) {
-        if (i['qrCode'] == qrCode) {
-        var  time = i['datetime'];
-          emit(QRCodeExists(qrCode,time));
-        }
+      var existingCodesMap = <String, Map<String, dynamic>>{};
+      for (var code in existingCodesList) {
+        existingCodesMap[code['qrCode']] = code;
       }
-      if (existingCodes.any((element) => element['qrCode'] == qrCode)) {
-        // emit(QRCodeExists(qrCode));
+
+      // Check if the QR code already exists in the local database
+      if (existingCodesMap.containsKey(qrCode)) {
+        var time = existingCodesMap[qrCode]!['datetime'];
+        emit(QRCodeExists(qrCode, time));
+        isScanning = false; // Reset scanning state
+        controller?.resumeCamera(); // Resume camera for next scan
         return;
       }
 
@@ -95,11 +96,13 @@ class ScannerCubit extends Cubit<ScannerState> {
       controller?.resumeCamera(); // Resume camera for next scan
     }
   }
+
   void startSingleScan() {
     result = null;
     isScanning = true;
     controller?.resumeCamera();
   }
+
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
@@ -109,7 +112,7 @@ class ScannerCubit extends Cubit<ScannerState> {
               title: 'Error',
               description:
                   'No permission to access the camera \n لا تصريح بالوصول إلى الكاميرا',
-              buttonColor:const Color(0xffD93E47))
+              buttonColor: const Color(0xffD93E47))
           .show();
     }
   }

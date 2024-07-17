@@ -42,7 +42,8 @@ class DatabaseHelper {
     await _initDatabase();
   }
 
-  Stream<List<Map<String, dynamic>>> get qrcodesStream => _qrcodesController.stream;
+  Stream<List<Map<String, dynamic>>> get qrcodesStream =>
+      _qrcodesController.stream;
 
   Future<int> insertQRCode(Map<String, dynamic> row) async {
     Database db = await database;
@@ -50,6 +51,8 @@ class DatabaseHelper {
     await _updateQRCodesStream();
     return id;
   }
+
+
 
   Future<List<Map<String, dynamic>>> queryAllQRCodes() async {
     Database db = await database;
@@ -60,7 +63,8 @@ class DatabaseHelper {
   Future<int> updateQRCode(Map<String, dynamic> row) async {
     Database db = await database;
     int id = row['id'];
-    int result = await db.update('qrcodes', row, where: 'id = ?', whereArgs: [id]);
+    int result =
+        await db.update('qrcodes', row, where: 'id = ?', whereArgs: [id]);
     await _updateQRCodesStream();
     return result;
   }
@@ -105,7 +109,8 @@ class DatabaseHelper {
 
   Future<void> resetIds() async {
     Database db = await database;
-    await db.delete('sqlite_sequence', where: 'name = ?', whereArgs: ['qrcodes']);
+    await db
+        .delete('sqlite_sequence', where: 'name = ?', whereArgs: ['qrcodes']);
     await _updateQRCodesStream();
   }
 
