@@ -11,7 +11,7 @@ String formattedTime =
 
 class Scanner extends StatelessWidget {
   Scanner({super.key});
- static String id = 'Scanner';
+  static String id = 'Scanner';
   final TextEditingController code = TextEditingController();
 
   @override
@@ -19,7 +19,7 @@ class Scanner extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor:  primarycolor,
+      backgroundColor: primarycolor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -79,9 +79,10 @@ class Scanner extends StatelessWidget {
                         color: Colors.black,
                       ),
                       controller: code,
-                      onsubmit:  (value) {
-                              storeCode(context, code);
-                            },
+                      onsubmit: (value) {
+                        storeCode(context, code);
+                        code.clear();
+                      },
                     ),
                   ),
                   SizedBox(
@@ -90,7 +91,7 @@ class Scanner extends StatelessWidget {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor:  primarycolor,
+                        backgroundColor: primarycolor,
                         shadowColor: Colors.grey, // Shadow color
                         elevation: 5, // Elevation
                         shape: RoundedRectangleBorder(

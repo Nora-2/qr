@@ -65,14 +65,5 @@ void storeCode(
   await dbHelper.insertQRCode(newCode);
 
   // Show AlertDialog
-  if (enteredCode.isNotEmpty) {
-    customAwesomeDialog(
-            context: context,
-            dialogType: DialogType.success,
-            title: 'Success',
-            description:
-                'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
-            buttonColor: Color(0xff00CA71))
-        .show();
-  }
+ 
 }

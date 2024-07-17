@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +22,7 @@ class DataCubit extends Cubit<DataState> {
 
       //Show AlertDialog
       customAwesomeDialog(
-              // ignore: use_build_context_synchronously
+              
               context: context,
               dialogType: DialogType.success,
               title: 'Success',
@@ -33,7 +35,7 @@ class DataCubit extends Cubit<DataState> {
 
       //Show AlertDialog
       customAwesomeDialog(
-              // ignore: use_build_context_synchronously
+             
               context: context,
               dialogType: DialogType.error,
               title: 'Error',
@@ -56,7 +58,7 @@ class DataCubit extends Cubit<DataState> {
 
       //Show AlertDialog
       customAwesomeDialog(
-              // ignore: use_build_context_synchronously
+              
               context: context,
               dialogType: DialogType.success,
               title: 'Success',
@@ -69,7 +71,7 @@ class DataCubit extends Cubit<DataState> {
 
       //Show AlertDialog
       customAwesomeDialog(
-              // ignore: use_build_context_synchronously
+            
               context: context,
               dialogType: DialogType.error,
               title: 'Error',

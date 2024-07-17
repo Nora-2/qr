@@ -42,14 +42,7 @@ class _QRViewExampleState extends State<QRViewExample> {
               debugPrint('QRCodeStored State Triggered'); // Debugging statement
 
               // Show AlertDialog
-              customAwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.success,
-                      title: 'Success',
-                      description:
-                          'The Barcode stored successfully! \n تم حفظ الباركود بنجاح',
-                      buttonColor: const Color(0xff00CA71))
-                  .show();
+              
             } else if (state is QRCodeExists) {
               debugPrint(
                   'QRCodeExists State Triggered with: ${state.qrCode}'); // Debugging statement

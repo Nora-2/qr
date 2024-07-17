@@ -7,6 +7,7 @@ import 'package:qr_code_app/features/welcome.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
 }
@@ -16,12 +17,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:const welcomePage(),
-       initialRoute: AppRoutes.initialRoute,
-              routes: AppRoutes.routes,
+      home: const welcomePage(),
+      initialRoute: AppRoutes.initialRoute,
+      routes: AppRoutes.routes,
     );
   }
-}
 
+  
+}
