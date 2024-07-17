@@ -64,11 +64,9 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
     if (datetime.isEmpty) {
       qrcodes = [];
     } else {
-<<<<<<< HEAD
-      qrcodes = await _dbHelper.queryQRCodeBytime(qr);
-=======
+
       qrcodes = await _dbHelper.queryQRCodes(datetime);
->>>>>>> 11030e84077bb54f39d0750dcd119d3af32564ad
+
     }
     setState(() {
       _qrcodes = qrcodes;
