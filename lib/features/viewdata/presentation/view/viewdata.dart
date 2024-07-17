@@ -19,7 +19,9 @@ class ViewDataScreen extends StatefulWidget {
 class _ViewDataScreenState extends State<ViewDataScreen> {
   List<Map<String, dynamic>> _qrcodes = [];
   late DatabaseHelper _dbHelper;
-  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchControllerID = TextEditingController();
+  final TextEditingController _searchControllerQR = TextEditingController();
+  final TextEditingController _searchControllerDatetime = TextEditingController();
   String _searchQuery = '';
 
 
@@ -30,13 +32,39 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
    // _loadData();
   }
 
-  Future<void> _loadData(String id) async {
+  Future<void> _loadDataID(String id) async {
     await _dbHelper.initDatabase();
     List<Map<String, dynamic>> qrcodes;
     if (id.isEmpty) {
       qrcodes = [];
     } else {
       qrcodes = await _dbHelper.queryQRCodes(id);
+    }
+    setState(() {
+      _qrcodes = qrcodes;
+    });
+  }
+
+   Future<void> _loadDataQR(String qr) async {
+    await _dbHelper.initDatabase();
+    List<Map<String, dynamic>> qrcodes;
+    if (qr.isEmpty) {
+      qrcodes = [];
+    } else {
+      qrcodes = await _dbHelper.queryQRCodes(qr);
+    }
+    setState(() {
+      _qrcodes = qrcodes;
+    });
+  }
+
+  Future<void> _loadDataDatetime(String qr) async {
+    await _dbHelper.initDatabase();
+    List<Map<String, dynamic>> qrcodes;
+    if (qr.isEmpty) {
+      qrcodes = [];
+    } else {
+      qrcodes = await _dbHelper.queryQRCodes(qr);
     }
     setState(() {
       _qrcodes = qrcodes;
@@ -94,15 +122,51 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
             Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              controller: _searchController,
+              controller: _searchControllerID,
               decoration: InputDecoration(
-                labelText: 'Search by ID /qr / datetime',
+                labelText: 'Search by ID',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () {
                     setState(() {
-                      _searchQuery = _searchController.text;
-                      _loadData(_searchQuery);
+                      _searchQuery = _searchControllerID.text;
+                      _loadDataID(_searchQuery);
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchControllerQR,
+              decoration: InputDecoration(
+                labelText: 'Search by QR',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      _searchQuery = _searchControllerQR.text;
+                      _loadDataQR(_searchQuery);
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchControllerDatetime,
+              decoration: InputDecoration(
+                labelText: 'Search by Datetime',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      _searchQuery = _searchControllerDatetime.text;
+                      _loadDataDatetime(_searchQuery);
                     });
                   },
                 ),
@@ -174,7 +238,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
 
   Future<void> _deleteAllQRCodes(BuildContext context) async {
     await _dbHelper.deleteAllQRCodes();
-    _loadData(''); // Wait for data to update
+    _loadDataID(''); // Wait for data to update
 
     customAwesomeDialog(
             context: context,
@@ -191,7 +255,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
 
   Future<void> _deleteQRCode(BuildContext context, int id, int index) async {
     await _dbHelper.deleteQRCode(id);
-    _loadData(''); // Wait for data to update
+    _loadDataID(''); // Wait for data to update
   }
 }
 
