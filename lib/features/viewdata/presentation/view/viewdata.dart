@@ -58,13 +58,17 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
     });
   }
 
-  Future<void> _loadDataDatetime(String qr) async {
+  Future<void> _loadDataDatetime(String datetime) async {
     await _dbHelper.initDatabase();
     List<Map<String, dynamic>> qrcodes;
-    if (qr.isEmpty) {
+    if (datetime.isEmpty) {
       qrcodes = [];
     } else {
+<<<<<<< HEAD
       qrcodes = await _dbHelper.queryQRCodeBytime(qr);
+=======
+      qrcodes = await _dbHelper.queryQRCodes(datetime);
+>>>>>>> 11030e84077bb54f39d0750dcd119d3af32564ad
     }
     setState(() {
       _qrcodes = qrcodes;
