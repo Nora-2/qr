@@ -1,8 +1,8 @@
-
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 // ignore: camel_case_types
 class customAwesomeDialog extends StatelessWidget {
@@ -12,8 +12,8 @@ class customAwesomeDialog extends StatelessWidget {
   final String description;
   final Color buttonColor;
   final VoidCallback? onOkPressed;
+  final AudioPlayer audio = AudioPlayer();
 
-  // ignore: prefer_const_constructors_in_immutables
   customAwesomeDialog({
     super.key,
     required this.context,
@@ -24,7 +24,15 @@ class customAwesomeDialog extends StatelessWidget {
     this.onOkPressed,
   });
 
+  void playErrorSound() async {
+    await audio.play(AssetSource('assets/audios/Error.mp3'));
+  }
+
   void show() {
+    if (description =='The Barcode already exists:') {
+      playErrorSound();
+    }
+
     // ignore: avoid_single_cascade_in_expression_statements
     AwesomeDialog(
       context: context,
