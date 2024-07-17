@@ -145,14 +145,16 @@ class DatabaseHelper {
     );
   }
 
-   Future<List<Map<String, dynamic>>> queryQRCodeBytime(String datetime) async {
-    final db = await database;
-    return await db.query(
-      'qrcodes',
-      where: 'datetime = ?',
-      whereArgs: [datetime],
-    );
-  }
+ Future<List<Map<String, dynamic>>> queryQRCodeBytime(String datetime) async {
+  final db = await database;
+  // Assuming datetime format is 'YYYY/MM/DD-HH:MM'
+  // Extract the date part for comparison
+  return await db.query(
+    'qrcodes',
+    where: 'datetime LIKE ?',
+    whereArgs: ['%$datetime%'],
+  );
+}
 
     Future<List<Map<String, dynamic>>> queryQRCodeBycode(String qrCode) async {
     final db = await database;
