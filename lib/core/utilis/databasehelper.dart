@@ -52,8 +52,6 @@ class DatabaseHelper {
     return id;
   }
 
-
-
   Future<List<Map<String, dynamic>>> queryAllQRCodes() async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.query('qrcodes');
@@ -123,5 +121,14 @@ class DatabaseHelper {
       await _database!.close();
       _database = null; // Reset database instance
     }
+  }
+
+  Future<List<Map<String, dynamic>>> queryQRCodeById(String id) async {
+    final db = await database;
+    return await db.query(
+      'qrcodes',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }
