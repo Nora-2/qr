@@ -7,6 +7,7 @@ import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
 import 'package:qr_code_app/features/core.dart';
 import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
+import 'package:qr_code_app/widgets/TextField.dart';
 
 class ViewDataScreen extends StatefulWidget {
   const ViewDataScreen({super.key});
@@ -82,6 +83,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: primarycolor,
@@ -122,61 +124,44 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _searchControllerID,
-                decoration: InputDecoration(
-                  labelText: 'Search by ID',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      setState(() {
-                        _searchQuery = _searchControllerID.text;
-                        _loadDataID(_searchQuery);
-                      });
-                    },
-                  ),
-                ),
-              ),
+              padding:  EdgeInsets.only( top: height * 0.05 , bottom: height * 0.05),
+              child:CustomTextFormField(controller: _searchControllerID, labelText: 'ID', hintText:  'Search by Id', onPressed: () {
+                setState(() {
+                  _searchQuery = _searchControllerID.text;
+                  _loadDataID(_searchQuery);
+                });
+              },
+            ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _searchControllerQR,
-                decoration: InputDecoration(
-                  labelText: 'Search by QR',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
+              padding:  EdgeInsets.only(  bottom: height * 0.05),
+              child: CustomTextFormField(controller: _searchControllerQR, labelText: 'BARCODE', hintText: 'Search by Barcode', onPressed: () {
                       setState(() {
                         _searchQuery = _searchControllerQR.text;
                         _loadDataQR(_searchQuery);
                       });
-                    },
-                  ),
-                ),
-              ),
+                    },)
+              
+              
+    
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _searchControllerDatetime,
-                decoration: InputDecoration(
-                  labelText: 'Search by Datetime',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
+           padding:  EdgeInsets.only(  bottom: height * 0.05),
+              child: CustomTextFormField(controller: _searchControllerDatetime, labelText: 'DATE', hintText: 'Search by Date', onPressed: () {
                       setState(() {
                         _searchQuery = _searchControllerDatetime.text;
                         _loadDataDatetime(_searchQuery);
                       });
-                    },
-                  ),
-                ),
-              ),
+                    },)
+              
+              
+              
+            
             ),
             _qrcodes.isEmpty
-                ? const Center(child: Text('No data found'))
+                ? const Center(child: Text('No data found',style: TextStyle(
+                  fontSize: 20,
+                ),))
                 : SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: FittedBox(
