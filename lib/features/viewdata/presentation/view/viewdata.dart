@@ -7,7 +7,6 @@ import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
 import 'package:qr_code_app/features/core.dart';
 import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
-import 'package:qr_code_app/widgets/TextField.dart';
 
 class ViewDataScreen extends StatefulWidget {
   const ViewDataScreen({super.key});
@@ -30,65 +29,9 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
   void initState() {
     super.initState();
     _dbHelper = DatabaseHelper();
-    // _loadData();
+
   }
 
-  Future<void> _loadDataID(String id) async {
-    await _dbHelper.initDatabase();
-    List<Map<String, dynamic>> qrcodes;
-    if (id.isEmpty) {
-      qrcodes = [];
-    } else {
-      qrcodes = await _dbHelper.queryQRCodeById(id);
-    }
-    setState(() {
-      _qrcodes = qrcodes;
-    });
-  }
-
-  Future<void> _loadDataQR(String qr) async {
-    await _dbHelper.initDatabase();
-    List<Map<String, dynamic>> qrcodes;
-    if (qr.isEmpty) {
-      qrcodes = [];
-    } else {
-      qrcodes = await _dbHelper.queryQRCodeBycode(qr);
-    }
-    setState(() {
-      _qrcodes = qrcodes;
-    });
-  }
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != DateTime.now()) {
-      setState(() {
-        _searchControllerDatetime.text = "${picked.year}/${picked.month}/${picked.day}";
-        _searchQuery = _searchControllerDatetime.text;
-        _loadDataDatetime(_searchQuery);
-      });
-    }
-  }
-
-
-  Future<void> _loadDataDatetime(String datetime) async {
-    await _dbHelper.initDatabase();
-    List<Map<String, dynamic>> qrcodes;
-    if (datetime.isEmpty) {
-      qrcodes = [];
-    } else {
-      qrcodes = await _dbHelper.queryQRCodeBytime(datetime);
-    }
-    setState(() {
-      _qrcodes = qrcodes;
-    });
-  }
-
-// 2024/7/17-20:22
   @override
   void dispose() {
     _dbHelper.dispose();
@@ -98,6 +41,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: primarycolor,
@@ -136,70 +80,143 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
           ],
         ),
         body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
           child: Column(
             children: [
-              Padding(
-                padding:
-                    EdgeInsets.only(top: height * 0.05, bottom: height * 0.05),
-                child: CustomTextFormField(
-                  controller: _searchControllerID,
-                  labelText: 'ID',
-                  hintText: 'Search by Id',
-                  onPressed: () {
-                    setState(() {
-                      _searchQuery = _searchControllerID.text;
+          
+             Padding(
+                padding: EdgeInsets.only(top: height * 0.05, bottom: height * 0.05,left: 16,right: 16),
+                child: TextField(
+                  decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                                  _searchQuery = _searchControllerID.text;
                       _loadDataID(_searchQuery);
-                    });
-                  },
+                        },
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: width * 0.05, vertical: height * 0.02),
+                     labelText: 'ID',
+                  hintText: 'Search by Id',
+                      labelStyle: TextStyle(
+                        fontSize: 25,
+                        color: primarycolor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF047EB0),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF88AACA),
+                        ),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFF88AACA),
+                        ),
+                      )),
+                 controller: _searchControllerID,
                 ),
               ),
-              Padding(
-                  padding: EdgeInsets.only(bottom: height * 0.05),
-                  child: CustomTextFormField(
-                    controller: _searchControllerQR,
+             Padding(
+                padding: EdgeInsets.only(bottom: height * 0.05,left: 16,right: 16),
+                child: TextField(
+                  decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                          _searchQuery = _searchControllerQR.text;
+                        _loadDataQR(_searchQuery);
+                        },
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: width * 0.05, vertical: height * 0.02),
+                      
                     labelText: 'BARCODE',
                     hintText: 'Search by Barcode',
-                    onPressed: () {
-                      setState(() {
-                        _searchQuery = _searchControllerQR.text;
-                        _loadDataQR(_searchQuery);
-                      });
-                    },
-                  ),
+                      labelStyle: TextStyle(
+                        fontSize: 25,
+                        color: primarycolor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF047EB0),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF88AACA),
+                        ),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFF88AACA),
+                        ),
+                      )),
+                   controller: _searchControllerQR,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-              controller: _searchControllerDatetime,
-              decoration: InputDecoration(
-                labelText: 'Search by Datetime',
-                prefixIcon: IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () {
-                    _selectDate(context);
-                  },
-                ),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                   setState(() {
-                  _searchQuery = _searchControllerDatetime.text;
-                  _loadDataDatetime(_searchQuery);
-                });
-                  },
+              Padding(
+                padding: EdgeInsets.only(bottom: height * 0.05,left: 16,right: 16),
+                child: TextField(
+                  decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () {
+                          _selectDate(context);
+                          _searchQuery = _searchControllerDatetime.text;
+                          _loadDataDatetime(_searchQuery);
+                        },
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: width * 0.05, vertical: height * 0.02),
+                      labelText: 'Date',
+                      hintText: 'Search by Date',
+                      labelStyle: TextStyle(
+                        fontSize: 25,
+                        color: primarycolor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF047EB0),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: Color(0xFF88AACA),
+                        ),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFF88AACA),
+                        ),
+                      )),
+                  controller: _searchControllerDatetime,
                 ),
               ),
-            ),
-            
-            ),
-            _qrcodes.isEmpty
-                ? const Center(child: Text('No data found'))
-                : SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: FittedBox(
+              _qrcodes.isEmpty
+                  ? const Center(child: Text('No data found'))
+                  : FittedBox(
                       fit: BoxFit.scaleDown,
                       child: DataTable(
                         columns: const [
@@ -222,83 +239,35 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
                                   icon: const Icon(
                                     Icons.delete,
                                     color: Colors.red,
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(bottom: height * 0.05),
-                  child: CustomTextFormField(
-                    controller: _searchControllerDatetime,
-                    labelText: 'DATE',
-                    hintText: 'Search by Date',
-                    onPressed: () {
-                      setState(() {
-                        _searchQuery = _searchControllerDatetime.text;
-                        _loadDataDatetime(_searchQuery);
-                      });
-                    },
-                  )),
-              _qrcodes.isEmpty
-                  ? const Center(
-                      child: Text(
-                      'No data found',
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ))
-                  : SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: DataTable(
-                          columns: const [
-                            DataColumn(label: Text('ID')),
-                            DataColumn(label: Text('Barcode \n الباركود')),
-                            DataColumn(label: Text('DateTime \n التاريخ')),
-                            DataColumn(label: Text('Actions')),
-                          ],
-                          rows: _qrcodes.map<DataRow>((code) {
-                            return DataRow(
-                              cells: [
-                                DataCell(Text('${code['id']}')),
-                                // ignore: sized_box_for_whitespace
-                                DataCell(Container(
-                                    width: 100,
-                                    child: Text('${code['qrCode']}'))),
-                                DataCell(Text('${code['datetime']}')),
-                                DataCell(
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () async {
-                                      _deleteQRCode(context, code['id'],
-                                          _qrcodes.indexOf(code));
-                                      await Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ViewDataScreen(),
-                                        ),
-                                      );
-                                      customAwesomeDialog(
-                                              context: context,
-                                              dialogType: DialogType.success,
-                                              title: 'Success',
-                                              onOkPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              description:
-                                                  'The Barcode deleted successfully! \n تم حذف هذا الباركود بنجاح',
-                                              buttonColor:
-                                                  const Color(0xff00CA71))
-                                          .show();
-                                    },
                                   ),
+                                  onPressed: () async {
+                                    _deleteQRCode(context, code['id'],
+                                        _qrcodes.indexOf(code));
+                                    await Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ViewDataScreen(),
+                                      ),
+                                    );
+                                    customAwesomeDialog(
+                                            context: context,
+                                            dialogType: DialogType.success,
+                                            title: 'Success',
+                                            onOkPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            description:
+                                                'The Barcode deleted successfully! \n تم حذف هذا الباركود بنجاح',
+                                            buttonColor:
+                                                const Color(0xff00CA71))
+                                        .show();
+                                  },
                                 ),
-                              ],
-                            );
-                          }).toList(),
-                        ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
                       ),
                     ),
             ],
@@ -306,6 +275,61 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
         ));
   }
 
+  Future<void> _loadDataID(String id) async {
+    await _dbHelper.initDatabase();
+    List<Map<String, dynamic>> qrcodes;
+    if (id.isEmpty) {
+      qrcodes = [];
+    } else {
+      qrcodes = await _dbHelper.queryQRCodeById(id);
+    }
+    setState(() {
+      _qrcodes = qrcodes;
+    });
+  }
+
+  Future<void> _loadDataQR(String qr) async {
+    await _dbHelper.initDatabase();
+    List<Map<String, dynamic>> qrcodes;
+    if (qr.isEmpty) {
+      qrcodes = [];
+    } else {
+      qrcodes = await _dbHelper.queryQRCodeBycode(qr);
+    }
+    setState(() {
+      _qrcodes = qrcodes;
+    });
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        _searchControllerDatetime.text =
+            "${picked.year}/${picked.month}/${picked.day}";
+        _searchQuery = _searchControllerDatetime.text;
+        _loadDataDatetime(_searchQuery);
+      });
+    }
+  }
+
+  Future<void> _loadDataDatetime(String datetime) async {
+    await _dbHelper.initDatabase();
+    List<Map<String, dynamic>> qrcodes;
+    if (datetime.isEmpty) {
+      qrcodes = [];
+    } else {
+      qrcodes = await _dbHelper.queryQRCodeBytime(datetime);
+    }
+    setState(() {
+      _qrcodes = qrcodes;
+    });
+  }
   Future<void> _deleteAllQRCodes(BuildContext context) async {
     await _dbHelper.deleteAllQRCodes();
     _loadDataID(''); // Wait for data to update
