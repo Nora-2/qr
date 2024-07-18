@@ -57,6 +57,22 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
       _qrcodes = qrcodes;
     });
   }
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        _searchControllerDatetime.text = "${picked.year}/${picked.month}/${picked.day}";
+        _searchQuery = _searchControllerDatetime.text;
+        _loadDataDatetime(_searchQuery);
+      });
+    }
+  }
+
 
   Future<void> _loadDataDatetime(String datetime) async {
     await _dbHelper.initDatabase();
@@ -160,20 +176,27 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
-                controller: _searchControllerDatetime,
-                decoration: InputDecoration(
-                  labelText: 'Search by Datetime',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      setState(() {
-                        _searchQuery = _searchControllerDatetime.text;
-                        _loadDataDatetime(_searchQuery);
-                      });
-                    },
-                  ),
+              controller: _searchControllerDatetime,
+              decoration: InputDecoration(
+                labelText: 'Search by Datetime',
+                prefixIcon: IconButton(
+                  icon: const Icon(Icons.calendar_today),
+                  onPressed: () {
+                    _selectDate(context);
+                  },
+                ),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                   setState(() {
+                  _searchQuery = _searchControllerDatetime.text;
+                  _loadDataDatetime(_searchQuery);
+                });
+                  },
                 ),
               ),
+            ),
+            
             ),
             _qrcodes.isEmpty
                 ? const Center(child: Text('No data found'))
