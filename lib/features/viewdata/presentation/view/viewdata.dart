@@ -65,9 +65,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
     if (datetime.isEmpty) {
       qrcodes = [];
     } else {
-
       qrcodes = await _dbHelper.queryQRCodeBytime(datetime);
-
     }
     setState(() {
       _qrcodes = qrcodes;
@@ -121,105 +119,118 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding:  EdgeInsets.only( top: height * 0.05 , bottom: height * 0.05),
-              child:CustomTextFormField(controller: _searchControllerID, labelText: 'ID', hintText:  'Search by Id', onPressed: () {
-                setState(() {
-                  _searchQuery = _searchControllerID.text;
-                  _loadDataID(_searchQuery);
-                });
-              },
-            ),
-            ),
-            Padding(
-              padding:  EdgeInsets.only(  bottom: height * 0.05),
-              child: CustomTextFormField(controller: _searchControllerQR, labelText: 'BARCODE', hintText: 'Search by Barcode', onPressed: () {
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    EdgeInsets.only(top: height * 0.05, bottom: height * 0.05),
+                child: CustomTextFormField(
+                  controller: _searchControllerID,
+                  labelText: 'ID',
+                  hintText: 'Search by Id',
+                  onPressed: () {
+                    setState(() {
+                      _searchQuery = _searchControllerID.text;
+                      _loadDataID(_searchQuery);
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(bottom: height * 0.05),
+                  child: CustomTextFormField(
+                    controller: _searchControllerQR,
+                    labelText: 'BARCODE',
+                    hintText: 'Search by Barcode',
+                    onPressed: () {
                       setState(() {
                         _searchQuery = _searchControllerQR.text;
                         _loadDataQR(_searchQuery);
                       });
-                    },)
-              
-              
-    
-            ),
-            Padding(
-           padding:  EdgeInsets.only(  bottom: height * 0.05),
-              child: CustomTextFormField(controller: _searchControllerDatetime, labelText: 'DATE', hintText: 'Search by Date', onPressed: () {
+                    },
+                  )),
+              Padding(
+                  padding: EdgeInsets.only(bottom: height * 0.05),
+                  child: CustomTextFormField(
+                    controller: _searchControllerDatetime,
+                    labelText: 'DATE',
+                    hintText: 'Search by Date',
+                    onPressed: () {
                       setState(() {
                         _searchQuery = _searchControllerDatetime.text;
                         _loadDataDatetime(_searchQuery);
                       });
-                    },)
-              
-              
-              
-            
-            ),
-            _qrcodes.isEmpty
-                ? const Center(child: Text('No data found',style: TextStyle(
-                  fontSize: 20,
-                ),))
-                : SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: DataTable(
-                        columns: const [
-                          DataColumn(label: Text('ID')),
-                          DataColumn(label: Text('Barcode \n الباركود')),
-                          DataColumn(label: Text('DateTime \n التاريخ')),
-                          DataColumn(label: Text('Actions')),
-                        ],
-                        rows: _qrcodes.map<DataRow>((code) {
-                          return DataRow(
-                            cells: [
-                              DataCell(Text('${code['id']}')),
-                              // ignore: sized_box_for_whitespace
-                              DataCell(Container(
-                                  width: 100,
-                                  child: Text('${code['qrCode']}'))),
-                              DataCell(Text('${code['datetime']}')),
-                              DataCell(
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
+                    },
+                  )),
+              _qrcodes.isEmpty
+                  ? const Center(
+                      child: Text(
+                      'No data found',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ))
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: DataTable(
+                          columns: const [
+                            DataColumn(label: Text('ID')),
+                            DataColumn(label: Text('Barcode \n الباركود')),
+                            DataColumn(label: Text('DateTime \n التاريخ')),
+                            DataColumn(label: Text('Actions')),
+                          ],
+                          rows: _qrcodes.map<DataRow>((code) {
+                            return DataRow(
+                              cells: [
+                                DataCell(Text('${code['id']}')),
+                                // ignore: sized_box_for_whitespace
+                                DataCell(Container(
+                                    width: 100,
+                                    child: Text('${code['qrCode']}'))),
+                                DataCell(Text('${code['datetime']}')),
+                                DataCell(
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () async {
+                                      _deleteQRCode(context, code['id'],
+                                          _qrcodes.indexOf(code));
+                                      await Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ViewDataScreen(),
+                                        ),
+                                      );
+                                      customAwesomeDialog(
+                                              context: context,
+                                              dialogType: DialogType.success,
+                                              title: 'Success',
+                                              onOkPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              description:
+                                                  'The Barcode deleted successfully! \n تم حذف هذا الباركود بنجاح',
+                                              buttonColor:
+                                                  const Color(0xff00CA71))
+                                          .show();
+                                    },
                                   ),
-                                  onPressed: () async {
-                                    _deleteQRCode(context, code['id'],
-                                        _qrcodes.indexOf(code));
-                                    await Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ViewDataScreen(),
-                                      ),
-                                    );
-                                    customAwesomeDialog(
-                                            context: context,
-                                            dialogType: DialogType.success,
-                                            title: 'Success',
-                                            onOkPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            description:
-                                                'The Barcode deleted successfully! \n تم حذف هذا الباركود بنجاح',
-                                            buttonColor:
-                                                const Color(0xff00CA71))
-                                        .show();
-                                  },
                                 ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
+                              ],
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
-                  ),
-          ],
+            ],
+          ),
         ));
   }
 
