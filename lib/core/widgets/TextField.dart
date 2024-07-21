@@ -39,7 +39,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
         controller: widget.controller,
         decoration: InputDecoration(
-            suffixIcon:  Icon(Icons.search),
+            suffixIcon: const Icon(Icons.search),
             filled: true,
             fillColor: Colors.white,
             floatingLabelBehavior: FloatingLabelBehavior.always,

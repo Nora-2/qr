@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_app/features/core.dart';
-import 'package:qr_code_app/widgets/CustomButton.dart';
+import 'package:qr_code_app/features/home/home.dart';
+import 'package:qr_code_app/core/widgets/CustomButton.dart';
 
 // ignore: camel_case_types
 class welcomePage extends StatefulWidget {

@@ -3,15 +3,11 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
-import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
+import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:qr_code_app/core/utilis/databasehelper.dart'; // Import your DatabaseHelper
-
+import 'package:qr_code_app/core/utilis/databasehelper.dart';
 part 'scanner_state.dart';
 
-DateTime now = DateTime.now();
-String date =
-    '${now.year}/${now.month}/${now.day}-${now.hour}:${now.minute}:${now.second}';
 
 class ScannerCubit extends Cubit<ScannerState> {
   ScannerCubit() : super(ScannerInitial());
@@ -52,7 +48,6 @@ class ScannerCubit extends Cubit<ScannerState> {
       }
     });
 
-    // Start scanning automatically
     controller.resumeCamera();
   }
 
@@ -60,10 +55,7 @@ class ScannerCubit extends Cubit<ScannerState> {
     if (qrCode == null) return;
 
     try {
-      // Initialize the DatabaseHelper instance
       DatabaseHelper dbHelper = DatabaseHelper();
-
-      // Fetch all QR codes and store them in a HashMap for fast lookup
       List<Map<String, dynamic>> existingCodesList =
           await dbHelper.queryAllQRCodes();
       var existingCodesMap = <String, Map<String, dynamic>>{};
@@ -71,16 +63,13 @@ class ScannerCubit extends Cubit<ScannerState> {
         existingCodesMap[code['qrCode']] = code;
       }
 
-      // Check if the QR code already exists in the local database
       if (existingCodesMap.containsKey(qrCode)) {
         var time = existingCodesMap[qrCode]!['datetime'];
         emit(QRCodeExists(qrCode, time));
-        isScanning = false; // Reset scanning state
-        controller?.resumeCamera(); // Resume camera for next scan
+        isScanning = false;
+        controller?.resumeCamera(); 
         return;
       }
-
-      // If it doesn't exist, proceed to store it
       Map<String, dynamic> newCode = {
         'qrCode': qrCode,
         'datetime': date,
@@ -88,12 +77,12 @@ class ScannerCubit extends Cubit<ScannerState> {
       await dbHelper.insertQRCode(newCode);
 
       emit(QRCodeStored());
-      isScanning = false; // Reset scanning state
-      controller?.resumeCamera(); // Resume camera for next scan
+      isScanning = false; 
+      controller?.resumeCamera(); 
     } catch (e) {
       emit(QRCodeError(e.toString()));
-      isScanning = false; // Reset scanning state in case of error
-      controller?.resumeCamera(); // Resume camera for next scan
+      isScanning = false; 
+      controller?.resumeCamera();
     }
   }
 

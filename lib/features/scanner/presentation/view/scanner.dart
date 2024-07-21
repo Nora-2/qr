@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/features/scanner/presentation/widget/customformfield.dart';
 import 'package:qr_code_app/features/scanner/presentation/widget/qrview.dart';
-import 'package:qr_code_app/features/scanner/presentation/widget/storecode.dart';
-import 'package:qr_code_app/widgets/toppart.dart';
+import 'package:qr_code_app/features/scanner/presentation/widget/manualcode.dart';
+import 'package:qr_code_app/core/widgets/toppart.dart';
 
-DateTime now = DateTime.now();
-String formattedTime =
-    'Date-${now.year}/${now.month}/${now.day} Time-${now.hour}:${now.minute}:${now.second}';
 
 class Scanner extends StatelessWidget {
   Scanner({super.key});
@@ -80,7 +77,7 @@ class Scanner extends StatelessWidget {
                       ),
                       controller: code,
                       onsubmit: (value) {
-                        storeCode(context, code);
+                       manualCode(context, code);
                         code.clear();
                       },
                     ),
@@ -98,7 +95,7 @@ class Scanner extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () => storeCode(context, code),
+                      onPressed: () => manualCode(context, code),
                       child: const Text(
                         'Store Code',
                         style: TextStyle(

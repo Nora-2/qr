@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_excel/excel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart'; // Adjust import as per your project structure
-import 'package:qr_code_app/widgets/AwesomeDiaglog.dart'; // Adjust import as per your project structure
+import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart'; // Adjust import as per your project structure
 
 part 'excel_state.dart'; // Define your ExcelState
 

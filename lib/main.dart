@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_app/core/app_routes.dart';
+import 'package:qr_code_app/core/utilis/app_routes.dart';
 import 'package:qr_code_app/core/utilis/blocobserver.dart';
-import 'package:qr_code_app/features/welcome.dart';
+import 'package:qr_code_app/features/spalsh/welcome.dart';
 
 
 void main() async {

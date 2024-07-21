@@ -1,9 +1,9 @@
-import 'package:qr_code_app/features/core.dart';
+import 'package:qr_code_app/features/home/home.dart';
 import 'package:qr_code_app/features/excel/presentation/view/excel.dart';
 import 'package:qr_code_app/features/scanner/presentation/view/scanner.dart';
 import 'package:qr_code_app/features/scanner/presentation/widget/qrview.dart';
 import 'package:qr_code_app/features/viewdata/presentation/view/viewdata.dart';
-import 'package:qr_code_app/features/welcome.dart';
+import 'package:qr_code_app/features/spalsh/welcome.dart';
 
 class AppRoutes {
   AppRoutes._();

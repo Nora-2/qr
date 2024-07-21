@@ -4,18 +4,14 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/core/utilis/databasehelper.dart';
-import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
+import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
 
-DateTime now = DateTime.now();
-String date =
-    '${now.year}/${now.month}/${now.day}-${now.hour}:${now.minute}';
 
-void storeCode(
+void manualCode(
     BuildContext context, TextEditingController codeController) async {
   String enteredCode = codeController.text.trim();
 
   if (enteredCode.isEmpty) {
-    // Show AlertDialog
     customAwesomeDialog(
             context: context,
             dialogType: DialogType.info,
@@ -28,22 +24,18 @@ void storeCode(
     return;
   }
 
-  // Initialize the DatabaseHelper instance
+
   DatabaseHelper dbHelper = DatabaseHelper();
 
-  // Query all existing QR codes from the local database
   List<Map<String, dynamic>> existingCodesList = await dbHelper.queryAllQRCodes();
-  
-  // Create a HashMap for fast lookup
+ 
   var existingCodesMap = <String, Map<String, dynamic>>{};
   for (var code in existingCodesList) {
     existingCodesMap[code['qrCode']] = code;
   }
 
-  // Check if the entered code already exists in the local database
-  if (existingCodesMap.containsKey(enteredCode)) {
+   if (existingCodesMap.containsKey(enteredCode)) {
     var time = existingCodesMap[enteredCode]!['datetime'];
-    // Show AlertDialog
     customAwesomeDialog(
             context: context,
             dialogType: DialogType.error,
@@ -55,15 +47,13 @@ void storeCode(
     return;
   }
 
-  // Prepare the new QR code data
   Map<String, dynamic> newCode = {
     'qrCode': enteredCode,
     'datetime': date,
   };
 
-  // Insert the new QR code into the local database
   await dbHelper.insertQRCode(newCode);
 
-  // Show AlertDialog
+
  
 }

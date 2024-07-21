@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/features/scanner/cubit/cubit/scanner_cubit.dart';
 import 'package:qr_code_app/features/scanner/presentation/view/scanner.dart';
-import 'package:qr_code_app/widgets/AwesomeDiaglog.dart';
+import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
 
 class QRViewExample extends StatefulWidget {
   const QRViewExample({super.key});
