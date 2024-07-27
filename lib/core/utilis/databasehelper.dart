@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -22,7 +23,14 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'qrcodes.db');
+     var directory = await getExternalStorageDirectory();
+      if (directory == null) {
+        throw Exception('Could not access external storage directory.');
+      }
+
+   
+    String path = '${directory.path}/QRCodes.db';
+     print('Database path////////////////////: $path'); 
     return await openDatabase(
       path,
       version: 1,

@@ -22,7 +22,6 @@ class DataCubit extends Cubit<DataState> {
 
       //Show AlertDialog
       customAwesomeDialog(
-              
               context: context,
               dialogType: DialogType.success,
               title: 'Success',
@@ -34,7 +33,6 @@ class DataCubit extends Cubit<DataState> {
       emit(DataDeletionError());
 
       customAwesomeDialog(
-             
               context: context,
               dialogType: DialogType.error,
               title: 'Error',
@@ -52,10 +50,9 @@ class DataCubit extends Cubit<DataState> {
     try {
       DatabaseHelper dbHelper = DatabaseHelper();
       await dbHelper.deleteAllQRCodes();
-      await dbHelper.resetIds(); 
+      await dbHelper.resetIds();
       emit(AllDataDeletedSuccessfully());
       customAwesomeDialog(
-              
               context: context,
               dialogType: DialogType.success,
               title: 'Success',
@@ -66,7 +63,6 @@ class DataCubit extends Cubit<DataState> {
     } catch (e) {
       emit(DataDeletionError());
       customAwesomeDialog(
-            
               context: context,
               dialogType: DialogType.error,
               title: 'Error',
@@ -79,6 +75,7 @@ class DataCubit extends Cubit<DataState> {
       print('$e');
     }
   }
+
   late DatabaseHelper dbHelper;
   final TextEditingController searchControllerID = TextEditingController();
   final TextEditingController searchControllerQR = TextEditingController();
@@ -87,7 +84,6 @@ class DataCubit extends Cubit<DataState> {
   String searchQuery = '';
   List<Map<String, dynamic>> qrcodes = [];
 
-  
   Future<void> loadDataID(String id) async {
     await dbHelper.initDatabase();
     List<Map<String, dynamic>> qrcodes;
@@ -96,9 +92,8 @@ class DataCubit extends Cubit<DataState> {
     } else {
       qrcodes = await dbHelper.queryQRCodeById(id);
     }
-   
-      qrcodes = qrcodes;
- 
+
+    qrcodes = qrcodes;
   }
 
   Future<void> loadDataQR(String qr) async {
@@ -109,11 +104,11 @@ class DataCubit extends Cubit<DataState> {
     } else {
       qrcodes = await dbHelper.queryQRCodeBycode(qr);
     }
-    
-      qrcodes = qrcodes;
-   
+
+    qrcodes = qrcodes;
   }
-   Future<void> selectDate(BuildContext context ) async {
+
+  Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -121,12 +116,10 @@ class DataCubit extends Cubit<DataState> {
       lastDate: DateTime(2101),
     );
     if (picked != null && picked != DateTime.now()) {
-     
-        searchControllerDatetime.text =
-            "${picked.year}/${picked.month}/${picked.day}";
-        searchQuery = searchControllerDatetime.text;
-        loadDataDatetime(searchQuery);
-  
+      searchControllerDatetime.text =
+          "${picked.year}/${picked.month}/${picked.day}";
+      searchQuery = searchControllerDatetime.text;
+      loadDataDatetime(searchQuery);
     }
   }
 
@@ -138,10 +131,10 @@ class DataCubit extends Cubit<DataState> {
     } else {
       qrcodes = await dbHelper.queryQRCodeBytime(datetime);
     }
- 
-      qrcodes = qrcodes;
 
+    qrcodes = qrcodes;
   }
+
   Future<void> deleteAllQRCodes(BuildContext context) async {
     await dbHelper.deleteAllQRCodes();
     loadDataID(''); // Wait for data to update

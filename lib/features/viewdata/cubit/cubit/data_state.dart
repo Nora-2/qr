@@ -12,3 +12,16 @@ class DataDeletionError
  extends DataState {}
 class DataDeletedSuccessfully extends DataState {}
 class AllDataDeletedSuccessfully extends DataState {}
+
+
+class DataLoading extends DataState {}
+
+class DataLoaded extends DataState {
+  final List<Map<String, dynamic>> qrcodes;
+  DataLoaded(this.qrcodes);
+}
+
+class DataError extends DataState {
+  final String message;
+  DataError(this.message);
+}
