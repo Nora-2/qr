@@ -20,7 +20,10 @@ class DataLoaded extends DataState {
   final List<Map<String, dynamic>> qrcodes;
   DataLoaded(this.qrcodes);
 }
-
+class qrload extends DataState {}
+class dateload extends DataState {}
+class companyload extends DataState {}
+class idload extends DataState {}
 class DataError extends DataState {
   final String message;
   DataError(this.message);

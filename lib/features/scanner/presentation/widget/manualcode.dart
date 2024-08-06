@@ -8,7 +8,7 @@ import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
 
 
 void manualCode(
-    BuildContext context, TextEditingController codeController) async {
+    BuildContext context, TextEditingController codeController,String company) async {
   String enteredCode = codeController.text.trim();
 
   if (enteredCode.isEmpty) {
@@ -50,6 +50,7 @@ void manualCode(
   Map<String, dynamic> newCode = {
     'qrCode': enteredCode,
     'datetime': date,
+    'Company':company,
   };
 
   await dbHelper.insertQRCode(newCode);

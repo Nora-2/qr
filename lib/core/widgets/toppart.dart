@@ -1,6 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:qr_code_app/features/home/home.dart';
+import 'package:qr_code_app/features/EnterCompanies.dart';
+
 
 // ignore: camel_case_types
 class toppart extends StatelessWidget {
@@ -8,27 +10,30 @@ class toppart extends StatelessWidget {
     super.key,
     required this.height,
     required this.width,
+    required this.SpecificPage,
   });
 
   final double height;
   final double width;
+  final Widget SpecificPage;
+
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height * 0.2,
       width: width,
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: EdgeInsets.only(top: height * 0.05),
+            padding: EdgeInsets.only(top: height * 0.03),
             alignment: Alignment.topLeft,
             child: IconButton(
-              onPressed: () {
-                Navigator.push(
+               onPressed: () {
+                Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const Core()),
+                  MaterialPageRoute(builder: (context) => SpecificPage),
                 );
               },
               icon: const Icon(
@@ -48,6 +53,21 @@ class toppart extends StatelessWidget {
                       letterSpacing: 1)),
             ),
           ),
+             Container(
+               padding: EdgeInsets.only(top: height * 0.03),
+            alignment: Alignment.topRight,
+            child: IconButton(
+               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>const Entercompanies()),
+                );
+              },
+              icon: const Icon(
+                Icons.business,
+                color: Color.fromARGB(255, 242, 238, 238),
+              ),
+            ),)
         ],
       ),
     );

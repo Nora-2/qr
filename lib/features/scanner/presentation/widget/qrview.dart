@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
 import 'package:qr_code_app/features/scanner/cubit/cubit/scanner_cubit.dart';
-import 'package:qr_code_app/features/scanner/presentation/view/scanner.dart';
+
 import 'package:qr_code_app/core/widgets/AwesomeDiaglog.dart';
 
 class QRViewExample extends StatefulWidget {
@@ -42,7 +42,6 @@ class _QRViewExampleState extends State<QRViewExample> {
               debugPrint('QRCodeStored State Triggered'); // Debugging statement
 
               // Show AlertDialog
-              
             } else if (state is QRCodeExists) {
               debugPrint(
                   'QRCodeExists State Triggered with: ${state.qrCode}'); // Debugging statement
@@ -81,10 +80,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                       icon: const Icon(Icons.arrow_back_ios),
                       color: Colors.white, // Use a different back icon
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Scanner()),
-                        );
+                        Navigator.pop(context);
                       },
                     ),
                     title: const Text(

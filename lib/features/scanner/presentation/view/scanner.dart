@@ -1,5 +1,8 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:qr_code_app/core/utilis/constant.dart';
+import 'package:qr_code_app/features/home/home.dart';
 import 'package:qr_code_app/features/scanner/presentation/widget/customformfield.dart';
 import 'package:qr_code_app/features/scanner/presentation/widget/qrview.dart';
 import 'package:qr_code_app/features/scanner/presentation/widget/manualcode.dart';
@@ -7,9 +10,10 @@ import 'package:qr_code_app/core/widgets/toppart.dart';
 
 
 class Scanner extends StatelessWidget {
-  Scanner({super.key});
+  Scanner({super.key,required this.company});
   static String id = 'Scanner';
   final TextEditingController code = TextEditingController();
+    String company;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class Scanner extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            toppart(height: height, width: width),
+            toppart(height: height, width: width,SpecificPage: Core(),),
             Container(
               height: height * 0.8,
               width: width,
@@ -77,7 +81,7 @@ class Scanner extends StatelessWidget {
                       ),
                       controller: code,
                       onsubmit: (value) {
-                       manualCode(context, code);
+                       manualCode(context, code,company);
                         code.clear();
                       },
                     ),
@@ -95,7 +99,7 @@ class Scanner extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () => manualCode(context, code),
+                      onPressed: () => manualCode(context, code,company),
                       child: const Text(
                         'Store Code',
                         style: TextStyle(

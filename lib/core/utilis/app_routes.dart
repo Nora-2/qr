@@ -19,7 +19,7 @@ class AppRoutes {
     QRViewExample.id: (context) => const QRViewExample(),
     Core.id: (context) => const Core(),
     DownloadDataScreen.id: (context) => const DownloadDataScreen(),
-    Scanner.id: (context) =>  Scanner(),
+    Scanner.id: (context) =>  Scanner(company:''),
     ViewDataScreen.id: (context) => const ViewDataScreen(),
   
   };
