@@ -25,6 +25,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   dropdown_search: ^5.0.3
   audioplayers:
+  gsheets: ^0.5.0
 flutter_icons:
   image_path: "assets/images/unnamed.png"
   android: "launcher_icon"
