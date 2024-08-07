@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_app/core/utilis/app_routes.dart';
 import 'package:qr_code_app/core/utilis/blocobserver.dart';
 import 'package:qr_code_app/features/spalsh/welcome.dart';
-
+import 'package:qr_code_app/GoogleSheet/url.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await UserSheetApi.init();
 
   Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
@@ -24,6 +26,4 @@ class MyApp extends StatelessWidget {
       routes: AppRoutes.routes,
     );
   }
-
-  
 }
